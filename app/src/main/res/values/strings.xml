@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">GymApp</string>
+
+    <string name="appTitle">Gym App</string>
+    <string name="username">UserName</string>
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+    <string name="forgotPassword">Forgot Password?</string>
+    <string name="login">Login</string>
+    <string name="signUp">SignUp</string>
+    <string name="fullName">Full name</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="confirm_btn">Confirm</string>
+    <string name="email">Email</string>
+    <string name="close">close</string>
+    <string name="somethingWentWrong">Something went wrong :(</string>
+    <string name="somethingWentWrongOnInsert">Something went wrong on insert :(</string>
+    <string name="somethingWentWrongOnUpdate">Something went wrong on update:(</string>
+    <string name="somethingWentWrongOnDelete">Something went wrong on delete :(</string>
+    <string name="wrongUserNameOrPassword">Wrong username or password!</string>
+</resources>
