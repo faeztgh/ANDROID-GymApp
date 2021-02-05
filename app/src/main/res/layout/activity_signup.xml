@@ -172,7 +172,7 @@
 
 
             <Button
-                android:id="@+id/logIn_btn"
+                android:id="@+id/signup_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
@@ -189,7 +189,7 @@
                 />
 
             <Button
-                android:id="@+id/signup_btn"
+                android:id="@+id/login_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"

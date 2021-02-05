@@ -39,4 +39,42 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
 The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.</string>
 
 
+    <string name="inappropriateInput">Inappropriate input!</string>
+    <string name="itemRemoved">Item Removed</string>
+    <string name="itemPayedSuccessfully">Item Payed Successfully!</string>
+    <string name="optionNotImplYet">this option is not implemented yet!</string>
+    <string name="emptyUsernameField">UserName field is EMPTY!</string>
+    <string name="emptyPasswordField">Password field is EMPTY!</string>
+    <string name="userNotExist">User not exist in DB!</string>
+    <string name="userExist">User exist!</string>
+    <string name="networkConnectionError">Network Connection Error!</string>
+    <string name="networkJsonError">Cannot convert data to json</string>
+    <string name="networkGeneralError">Network Error!</string>
+    <string name="fill">Fill!</string>
+    <string name="cantLogout">Can\'t log out, Please try again</string>
+    <string name="itemCheckedSuccessfully">Item Checked Successfully!</string>
+    <string name="filePathNotSet">File Path Not Set!</string>
+    <string name="filePathNotFound">File Path Not Found!</string>
+    <string name="youAreNotPermittedToReadThisFile">You Not Permitted To Read This File!</string>
+    <string name="exportingFileDoneSuccessfully">Exporting File Done Successfully!</string>
+    <string name="importingFileDoneSuccessfully">Importing File Done Successfully!</string>
+    <string name="externalStorageNotReadyToUse">External Storage Not Ready To Use!</string>
+    <string name="fileNotExist">File Not Exist!</string>
+    <string name="problemToReadFromFile">Problem To Read From File!</string>
+    <string name="problemToWriteOnFile">Problem To Write On File!</string>
+    <string name="errorMessageNotExist">Error Message Not Exist!</string>
+    <string name="chooseLocation">Please choose your location</string>
+    <string name="passwordLengthError">Password length must be 6 or more</string>
+
+    <string name="successfulRegister">You Signed up Successfully!</string>
+    <string name="cantGetUsersFromDb">Can\'t read users from Db!</string>
+    <string name="cantSignUpError">Can\'t sign up, please try again!</string>
+    <string name="cantSignInError">Can\'t sign in, please try again!</string>
+    <string name="somethingWentWrong">Something went wrong :(</string>
+    <string name="somethingWentWrongOnInsert">Something went wrong on insert :(</string>
+    <string name="somethingWentWrongOnUpdate">Something went wrong on update:(</string>
+    <string name="somethingWentWrongOnDelete">Something went wrong on delete :(</string>
+    <string name="somethingWentWrongOnCheckUser">Something went wrong on Check for user existence:(</string>
+    <string name="wrongUserNameOrPassword">Wrong username or password!</string>
+    <string name="cannotGetUserFromDb"> Cannot get user from DB!</string>
 </resources>
