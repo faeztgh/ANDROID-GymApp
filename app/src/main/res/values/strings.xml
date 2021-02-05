@@ -14,6 +14,8 @@
     <string name="email">Email</string>
     <string name="close">close</string>
     <string name="dashboard">Dashboard</string>
+    <string name="courses">Courses</string>
+    <string name="myCourses">My Courses</string>
     <string name="somethingWentWrong">Something went wrong :(</string>
     <string name="somethingWentWrongOnInsert">Something went wrong on insert :(</string>
     <string name="somethingWentWrongOnUpdate">Something went wrong on update:(</string>

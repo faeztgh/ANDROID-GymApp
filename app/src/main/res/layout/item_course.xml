@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:id="@+id/item_layout_constraint"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:background="@drawable/course_item"
+
+    android:padding="20dp"
+
+    >
+
+    <ImageView
+        android:id="@+id/exercise_icon_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/pushup" />
+
+    <TextView
+        android:id="@+id/exercise_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+
+        app:layout_constraintBottom_toTopOf="@id/exercise_workout_tv"
+        app:layout_constraintLeft_toRightOf="@id/vertical_middle_left_guid"
+        app:layout_constraintTop_toTopOf="parent"
+
+        tools:text="ABS"
+
+        />
+
+    <TextView
+        android:id="@+id/exercise_workout_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+
+        app:layout_constraintBottom_toTopOf="@id/exercise_hour_tv"
+        app:layout_constraintLeft_toRightOf="@id/vertical_middle_left_guid"
+        app:layout_constraintTop_toBottomOf="@+id/exercise_title_tv"
+        android:drawableLeft="@drawable/baseline_fitness_center_black_24dp"
+        android:drawablePadding="7dp"
+        tools:text="50 workout" />
+
+
+    <TextView
+        android:id="@+id/exercise_hour_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/vertical_middle_left_guid"
+        app:layout_constraintTop_toBottomOf="@id/exercise_workout_tv"
+        android:drawablePadding="7dp"
+        android:drawableLeft="@drawable/baseline_watch_later_black_24dp"
+        tools:text="36 hour" />
+
+
+
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical_middle_right_guid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+
+        app:layout_constraintGuide_percent="0.9" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical_middle_left_guid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.02" />
+</androidx.constraintlayout.widget.ConstraintLayout>
