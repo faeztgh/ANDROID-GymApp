@@ -6,8 +6,8 @@
     android:background="@color/bone_bg"
     android:orientation="vertical">
 
-    <!--App bar-->
-    <androidx.appcompat.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -47,6 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
+
                 android:layout_alignParentTop="true"
                 android:layout_alignParentBottom="true"
                 android:src="@drawable/back_arrow" />

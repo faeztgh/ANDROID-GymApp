@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+
+    >
+
+    <item
+        android:id="@+id/dashboard"
+        android:icon="@drawable/baseline_dashboard_black_24dp"
+        android:title="@string/dashboard"
+
+        />
+
+    <item
+        android:id="@+id/profile"
+        android:icon="@drawable/baseline_person_pin_black_24dp"
+        android:title="@string/profile" />
+    <item
+        android:id="@+id/about"
+        android:icon="@drawable/baseline_info_black_24dp"
+        android:title="@string/about" />
+    <item
+        android:id="@+id/logout"
+        android:icon="@drawable/baseline_exit_to_app_black_24dp"
+        android:title="@string/logout" />
+    <item
+        android:id="@+id/exit"
+        android:icon="@drawable/baseline_directions_run_black_24dp"
+        android:title="@string/exit" />
+
+</menu>
