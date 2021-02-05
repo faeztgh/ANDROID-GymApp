@@ -1,4 +1,4 @@
-package ir.faez.gymapp;
+package ir.faez.gymapp.activities;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -7,7 +7,9 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-public class MainActivity extends AppCompatActivity {
+import ir.faez.gymapp.R;
+
+public class DashboardActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
