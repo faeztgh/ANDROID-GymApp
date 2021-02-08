@@ -1,6 +1,7 @@
 package ir.faez.gymapp.activities;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -8,15 +9,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import ir.faez.gymapp.R;
+import ir.faez.gymapp.data.model.User;
 import ir.faez.gymapp.databinding.ActivitySignupBinding;
+import ir.faez.gymapp.network.NetworkHelper;
+import ir.faez.gymapp.utils.Result;
+import ir.faez.gymapp.utils.ResultListener;
 
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "SIGNUP";
-    private static final int LOCATION_REQUEST_CODE = 1;
     private ActivitySignupBinding binding;
-
-//    private NetworkHelper networkHelper;
+    private NetworkHelper networkHelper;
 
 
     @Override
@@ -31,48 +34,63 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         View view = binding.getRoot();
         setContentView(view);
 
+        // initializing NetworkHelper
+        networkHelper = NetworkHelper.getInstance(getApplicationContext());
+
         // invoke Listeners
-        invokeOnFocusListeners();
         invokeOnClickListeners();
     }
 
-    private void invokeOnFocusListeners() {
-    }
 
     private void invokeOnClickListeners() {
-        binding.signupBtn.setOnClickListener(this);
-        binding.loginBtn.setOnClickListener(this);
+        binding.registerBtn.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.signup_btn:
-                signUpBtn();
-                break;
-            case R.id.login_btn:
-                finish();
+            case R.id.register_btn:
+                signUpBtnHandler();
                 break;
             default:
                 Toast.makeText(this, "Wrong Choice", Toast.LENGTH_SHORT).show();
         }
     }
 
+
     //****************************** Implementing OnClick Methods*********************************
-    private void signUpBtn() {
+    private void signUpBtnHandler() {
         String fullName = binding.fullnameEdt.getText().toString().trim();
         String email = binding.emailEdt.getText().toString().trim();
         String userName = binding.usernameEdt.getText().toString().trim();
         String password = binding.passwordEdt.getText().toString().trim();
-        String address = binding.passwordRepEdt.getText().toString();
 
-// validate fields
+
+        // validate fields
         if (isInputsFilled()
                 && isEmailValid()
                 && isPasswordValid()
                 && isConfirmPasswordValid()) {
 
+            User user = new User(fullName, email, userName, password);
 
+            networkHelper.signupUser(user, new ResultListener<User>() {
+                @Override
+                public void onResult(Result<User> result) {
+                    Log.d(TAG, "Result of signing user up in server" + result);
+                    Error error = (result != null) ? result.getError() : null;
+
+                    if ((result == null) || (error != null)) {
+                        String errMsg = (error != null) ? error.getMessage() : getString(R.string.cantSignUpError);
+                        Toast.makeText(SignupActivity.this, errMsg, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    Toast.makeText(SignupActivity.this, R.string.successfulRegister, Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            });
+
+            Log.i(TAG, "signUpBtnHandler: "+userName);
 
         }
     }

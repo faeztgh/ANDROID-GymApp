@@ -26,28 +26,24 @@ public class User {
     private String password;
     @ColumnInfo
     private String sessionToken;
-    @ColumnInfo
-    private List<String> courses;
+
     private String isLoggedIn;
 
-    public User(String id, String fullName, String email, String username, String password, List<String> courses) {
+    public User(String id, String fullName, String email, String username, String password) {
         this.id = id;
         this.fullName = fullName;
         this.email = email;
         this.username = username;
         this.password = password;
-        this.courses = courses;
+
     }
 
     @Ignore
     public User(String fullName, String email, String username, String password) {
-
         this.fullName = fullName;
         this.email = email;
         this.username = username;
         this.password = password;
-
-
     }
 
 
@@ -57,13 +53,6 @@ public class User {
         this.password = password;
     }
 
-    public List<String> getCourses() {
-        return courses;
-    }
-
-    public void setCourses(List<String> courses) {
-        this.courses = courses;
-    }
 
     @NonNull
     public String getId() {
