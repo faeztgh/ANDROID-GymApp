@@ -90,7 +90,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 }
             });
 
-            Log.i(TAG, "signUpBtnHandler: "+userName);
+
 
         }
     }

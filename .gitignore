@@ -12,3 +12,9 @@
 /captures
 .externalNativeBuild
 .cxx
+*.png
+*.gif
+*.jpg
+*.mkv
+*.mp4
+
