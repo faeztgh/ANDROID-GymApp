@@ -171,7 +171,11 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 
                 break;
             case R.id.profile_iv:
-                Toast.makeText(this, R.string.optionNotImplYet, Toast.LENGTH_SHORT).show();
+                profileHandler();
+
+                break;
+            case R.id.user_avatar_iv:
+                profileHandler();
 
                 break;
             case R.id.share_iv:
@@ -186,10 +190,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
                 Toast.makeText(this, R.string.optionNotImplYet, Toast.LENGTH_SHORT).show();
 
                 break;
-            case R.id.user_avatar_iv:
-                Toast.makeText(this, R.string.optionNotImplYet, Toast.LENGTH_SHORT).show();
 
-                break;
             default:
                 Toast.makeText(this, R.string.somethingWentWrong, Toast.LENGTH_SHORT).show();
         }

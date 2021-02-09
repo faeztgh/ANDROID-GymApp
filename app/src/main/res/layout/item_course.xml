@@ -31,7 +31,7 @@
         android:textColor="@color/black"
         android:textSize="18sp"
 
-        app:layout_constraintBottom_toTopOf="@id/exercise_workout_tv"
+        app:layout_constraintBottom_toTopOf="@id/exercise_variant_tv"
         app:layout_constraintLeft_toRightOf="@id/vertical_middle_left_guid"
         app:layout_constraintTop_toTopOf="parent"
 
@@ -40,12 +40,12 @@
         />
 
     <TextView
-        android:id="@+id/exercise_workout_tv"
+        android:id="@+id/exercise_variant_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
 
-        app:layout_constraintBottom_toTopOf="@id/exercise_hour_tv"
+        app:layout_constraintBottom_toTopOf="@id/exercise_time_tv"
         app:layout_constraintLeft_toRightOf="@id/vertical_middle_left_guid"
         app:layout_constraintTop_toBottomOf="@+id/exercise_title_tv"
         android:drawableLeft="@drawable/baseline_fitness_center_black_24dp"
@@ -54,14 +54,14 @@
 
 
     <TextView
-        android:id="@+id/exercise_hour_tv"
+        android:id="@+id/exercise_time_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/vertical_middle_left_guid"
-        app:layout_constraintTop_toBottomOf="@id/exercise_workout_tv"
+        app:layout_constraintTop_toBottomOf="@id/exercise_variant_tv"
         android:drawablePadding="7dp"
         android:drawableLeft="@drawable/baseline_watch_later_black_24dp"
         tools:text="36 hour" />

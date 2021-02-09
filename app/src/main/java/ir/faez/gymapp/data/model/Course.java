@@ -21,24 +21,26 @@ public class Course {
     private String courseDesc;
     @ColumnInfo
     private String ownerId;
-
-
+    @ColumnInfo
+    private String status;
     // ADD Course video Field @TODO
 
 
-    public Course(@NonNull String id, String courseTitle, String courseDesc, String ownerId) {
+    public Course(@NonNull String id, String courseTitle, String courseDesc, String ownerId, String status) {
         this.id = id;
         this.courseTitle = courseTitle;
         this.courseDesc = courseDesc;
         this.ownerId = ownerId;
+        this.status = status;
 
     }
 
     @Ignore
-    public Course(String courseTitle, String courseDesc, String ownerId) {
+    public Course(String courseTitle, String courseDesc, String ownerId, String status) {
         this.courseTitle = courseTitle;
         this.courseDesc = courseDesc;
         this.ownerId = ownerId;
+        this.status = status;
     }
 
     public String getOwnerId() {
@@ -72,5 +74,13 @@ public class Course {
 
     public void setCourseDesc(String courseDesc) {
         this.courseDesc = courseDesc;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

@@ -10,6 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/mineShaft"
         android:orientation="vertical">
 
         <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -29,8 +30,8 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/dash_bg"
+                    android:layout_height="250dp"
+                    android:background="@drawable/dash_linear_bg"
                     android:padding="20dp"
 
                     >
@@ -46,20 +47,21 @@
                     <TextView
                         android:id="@+id/dashboard_title"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:text="@string/dashboard"
-                        android:textColor="@color/black"
+                        android:textColor="@color/mineShaft"
                         android:textSize="32sp" />
 
 
                     <TextView
                         android:id="@+id/dashboard_user_name"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_below="@+id/dashboard_title"
+                        android:layout_marginTop="10dp"
                         android:layout_toRightOf="@id/dashboard_welcome"
-                        android:textColor="@color/red"
+                        android:textColor="@color/white"
                         android:textSize="24sp" />
 
                     <TextView
@@ -67,7 +69,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_below="@+id/dashboard_title"
+                        android:layout_marginTop="10dp"
                         android:text="welcome"
+                        android:textColor="@color/mineShaft"
                         android:textSize="24sp" />
 
 
@@ -87,21 +91,33 @@
                         android:layout_height="wrap_content"
                         android:layout_rowWeight="1"
                         android:layout_columnWeight="1"
+                        android:layout_gravity="center"
                         android:layout_margin="12dp"
+                        android:background="@drawable/outline_input_curved"
+                        android:backgroundTint="@color/mineShaft"
                         app:cardCornerRadius="15dp"
                         app:cardElevation="60dp">
 
                         <ImageView
                             android:id="@+id/all_courses_iv"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="170dp"
+                            android:layout_height="170dp"
+                            android:alpha="0.5"
                             android:background="@drawable/all_courses"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="16dp" />
 
-                        </ImageView>
-
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="@string/allCourses_activity"
+                            android:textColor="@color/bone_bg"
+                            android:textColorHighlight="@color/red"
+                            android:textSize="25sp"
+                            android:textStyle="bold" />
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
@@ -112,20 +128,31 @@
                         android:layout_margin="12dp"
                         app:cardCornerRadius="15dp"
                         app:cardElevation="60dp"
-
+                        android:background="@drawable/outline_input_curved"
+                        android:backgroundTint="@color/mineShaft"
+                        android:layout_gravity="center"
                         >
 
                         <ImageView
                             android:id="@+id/my_courses_iv"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="170dp"
+                            android:layout_height="170dp"
+                            android:alpha="0.5"
                             android:background="@drawable/my_courses"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="16dp" />
 
-
-                        </ImageView>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="@string/myCourses_activity"
+                            android:textColor="@color/bone_bg"
+                            android:textColorHighlight="@color/red"
+                            android:textSize="25sp"
+                            android:textStyle="bold" />
 
                     </androidx.cardview.widget.CardView>
                     <!--End of the First Row-->
@@ -138,19 +165,32 @@
                         android:layout_columnWeight="1"
                         android:layout_margin="12dp"
                         app:cardCornerRadius="15dp"
-                        app:cardElevation="60dp">
+                        app:cardElevation="60dp"
+                        android:background="@drawable/outline_input_curved"
+                        android:backgroundTint="@color/mineShaft"
+                        android:layout_gravity="center"
+                        >
 
                         <ImageView
                             android:id="@+id/profile_iv"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="170dp"
+                            android:layout_height="170dp"
+                            android:alpha="0.5"
                             android:background="@drawable/profile"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="16dp" />
 
-                        </ImageView>
-
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="@string/profile_activity"
+                            android:textColor="@color/bone_bg"
+                            android:textColorHighlight="@color/red"
+                            android:textSize="25sp"
+                            android:textStyle="bold" />
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
@@ -161,20 +201,31 @@
                         android:layout_margin="12dp"
                         app:cardCornerRadius="15dp"
                         app:cardElevation="60dp"
-
+                        android:background="@drawable/outline_input_curved"
+                        android:backgroundTint="@color/mineShaft"
+                        android:layout_gravity="center"
                         >
 
                         <ImageView
                             android:id="@+id/share_iv"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="170dp"
+                            android:layout_height="170dp"
+                            android:alpha="0.5"
                             android:background="@drawable/share"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="16dp" />
 
-
-                        </ImageView>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="Share"
+                            android:textColor="@color/bone_bg"
+                            android:textColorHighlight="@color/red"
+                            android:textSize="25sp"
+                            android:textStyle="bold" />
 
                     </androidx.cardview.widget.CardView>
                     <!--End Of Second Row-->
@@ -187,18 +238,31 @@
                         android:layout_columnWeight="1"
                         android:layout_margin="12dp"
                         app:cardCornerRadius="15dp"
-                        app:cardElevation="60dp">
-
+                        app:cardElevation="60dp"
+                        android:background="@drawable/outline_input_curved"
+                        android:backgroundTint="@color/mineShaft"
+                        android:layout_gravity="center"
+                        >
                         <ImageView
                             android:id="@+id/wallet_iv"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="170dp"
+                            android:layout_height="170dp"
+                            android:alpha="0.5"
                             android:background="@drawable/wallet"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="16dp" />
 
-                        </ImageView>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="Wallet"
+                            android:textColor="@color/bone_bg"
+                            android:textColorHighlight="@color/red"
+                            android:textSize="25sp"
+                            android:textStyle="bold" />
 
                     </androidx.cardview.widget.CardView>
 
@@ -210,20 +274,31 @@
                         android:layout_margin="12dp"
                         app:cardCornerRadius="15dp"
                         app:cardElevation="60dp"
-
+                        android:background="@drawable/outline_input_curved"
+                        android:backgroundTint="@color/mineShaft"
+                        android:layout_gravity="center"
                         >
 
                         <ImageView
                             android:id="@+id/journals_iv"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="170dp"
+                            android:layout_height="170dp"
+                            android:alpha="0.5"
                             android:background="@drawable/journals"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="16dp" />
 
-
-                        </ImageView>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="Journals"
+                            android:textColor="@color/bone_bg"
+                            android:textColorHighlight="@color/red"
+                            android:textSize="25sp"
+                            android:textStyle="bold" />
 
                     </androidx.cardview.widget.CardView>
                     <!--End Of Third Row-->

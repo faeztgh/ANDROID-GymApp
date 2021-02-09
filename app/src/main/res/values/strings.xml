@@ -13,6 +13,8 @@
 
 
     <string name="welcome">Welcome</string>
+    <string name="dummyHeight">Height: 180 CM</string>
+    <string name="dummy_weight">Weight: 75 KG</string>
 
     <string name="appTitle">Gym App</string>
     <string name="username">UserName</string>
