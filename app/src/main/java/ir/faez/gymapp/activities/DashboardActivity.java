@@ -1,5 +1,6 @@
 package ir.faez.gymapp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -66,18 +67,12 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 
     private void userInfoHandler() {
         if (appData.getCurrentUser() != null) {
-            binding.dashboardUserName.setText("Welcome " + appData.getCurrentUser().getFullName());
+            binding.dashboardUserName.setText(" " + appData.getCurrentUser().getFullName());
         }
     }
 
 
     private void drawerhandler() {
-//        drawerLayout = findViewById(R.id.drawer);
-//        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
-//        drawerLayout.addDrawerListener(drawerToggle);
-//        drawerToggle.syncState();
-//
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.dashboard_activity);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
@@ -95,10 +90,9 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
                 switch (id) {
                     case R.id.drawer_dashboard:
                         Toast.makeText(DashboardActivity.this, "Dashboard", Toast.LENGTH_SHORT).show();
-
                         break;
                     case R.id.profile_iv:
-                        Toast.makeText(DashboardActivity.this, "Settings", Toast.LENGTH_SHORT).show();
+                        profileHandler();
                         break;
                     case R.id.drawer_about:
                         Toast.makeText(DashboardActivity.this, "My Cart", Toast.LENGTH_SHORT).show();
@@ -107,7 +101,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
                         logoutHandler();
                         break;
                     case R.id.drawer_exit:
-                      exitFromAppHandler();
+                        exitFromAppHandler();
                         break;
 
                     default:
@@ -117,6 +111,11 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
             }
         });
 
+    }
+
+    private void profileHandler() {
+        Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+        startActivity(intent);
     }
 
     private void exitFromAppHandler() {

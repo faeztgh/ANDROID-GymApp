@@ -11,6 +11,9 @@
     <string name="profile_activity">Profile</string>
     <string name="dashboard_activity">Dashboard</string>
 
+
+    <string name="welcome">Welcome</string>
+
     <string name="appTitle">Gym App</string>
     <string name="username">UserName</string>
     <string name="password">Password</string>

@@ -27,7 +27,6 @@
                 >
 
 
-
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -53,11 +52,22 @@
                         android:textColor="@color/black"
                         android:textSize="32sp" />
 
+
                     <TextView
                         android:id="@+id/dashboard_user_name"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_below="@+id/dashboard_title"
+                        android:layout_toRightOf="@id/dashboard_welcome"
+                        android:textColor="@color/red"
+                        android:textSize="24sp" />
+
+                    <TextView
+                        android:id="@+id/dashboard_welcome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/dashboard_title"
+                        android:text="welcome"
                         android:textSize="24sp" />
 
 
