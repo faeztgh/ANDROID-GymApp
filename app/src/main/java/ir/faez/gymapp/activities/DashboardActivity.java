@@ -57,6 +57,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void invokeOnClickListeners() {
+        binding.userAvatarIv.setOnClickListener(this);
         binding.allCoursesIv.setOnClickListener(this);
         binding.myCoursesIv.setOnClickListener(this);
         binding.journalsIv.setOnClickListener(this);
@@ -113,16 +114,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 
     }
 
-    private void profileHandler() {
-        Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-        startActivity(intent);
-    }
 
-    private void exitFromAppHandler() {
-        moveTaskToBack(true);
-        finish();
-        android.os.Process.killProcess(android.os.Process.myPid());
-    }
 
     private void logoutHandler() {
         UserCudAsyncTask userCudAsyncTask = new UserCudAsyncTask(this, Action.UPDATE_ACTION,
@@ -164,7 +156,8 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.all_courses_iv:
-                Toast.makeText(this, R.string.optionNotImplYet, Toast.LENGTH_SHORT).show();
+                allCourseHandler();
+
                 break;
             case R.id.my_courses_iv:
                 Toast.makeText(this, R.string.optionNotImplYet, Toast.LENGTH_SHORT).show();
@@ -196,5 +189,20 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
+    //************************************* Navigation Handlers ******************************************
+    private void allCourseHandler() {
+        Intent intent = new Intent(getApplicationContext(), AllCoursesActivity.class);
+        startActivity(intent);
+    }
 
+    private void profileHandler() {
+        Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+        startActivity(intent);
+    }
+
+    private void exitFromAppHandler() {
+        moveTaskToBack(true);
+        finish();
+        android.os.Process.killProcess(android.os.Process.myPid());
+    }
 }
