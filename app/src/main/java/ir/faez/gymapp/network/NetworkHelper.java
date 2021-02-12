@@ -17,8 +17,11 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ir.faez.gymapp.R;
@@ -78,6 +81,8 @@ public class NetworkHelper {
 
     }
 
+    // **************************************** Sign Up ********************************
+
     public void signupUser(final User user, final ResultListener<User> listener) {
         if (!isNetworkConnected()) {
             Error error = new Error(context.getString(R.string.networkConnectionError));
@@ -100,7 +105,7 @@ public class NetworkHelper {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                      if (TextUtils.isEmpty(response)) {
+                if (TextUtils.isEmpty(response)) {
                     Error error = new Error(context.getString(R.string.networkGeneralError));
                     listener.onResult(new Result<User>(null, null, error));
                     return;
@@ -168,6 +173,8 @@ public class NetworkHelper {
         requestQueue.add(request);
     }
 
+
+    //************************************************* SIGN In ***********************
 
     public void signinUser(final User user, final ResultListener<User> listener) {
         if (!isNetworkConnected()) {
@@ -239,8 +246,77 @@ public class NetworkHelper {
         requestQueue.add(request);
     }
 
-    // Insert Course
-    public void insertExpense(final Course course, final User currUser, final ResultListener<Course> listener) {
+    //******************************************** Get All Courses ****************************
+    public void getAllCourses(final ResultListener<Course> listener) {
+        if (!isNetworkConnected()) {
+            Error error = new Error(context.getString(R.string.networkGeneralError));
+            listener.onResult(new Result<Course>(null, null, error));
+            return;
+        }
+
+        String url = hostUrl + "/classes/Course";
+        String courseJson = null;
+
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Get All Courses response: " + response);
+                if (TextUtils.isEmpty(response)) {
+                    Error error = new Error(context.getString(R.string.networkGeneralError));
+                    listener.onResult(new Result<Course>(null, null, error));
+                    return;
+                }
+
+                List<Course> resultCourse = null;
+
+
+                try {
+                    resultCourse = gson.fromJson(response, new TypeToken<ArrayList<Course>>() {
+                    }.getType());
+
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    Error error = new Error(context.getString(R.string.networkJsonError));
+                    listener.onResult(new Result<Course>(null, null, error));
+                    return;
+                }
+
+                listener.onResult(new Result<Course>(null, resultCourse, null));
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                printVolleyErrorDetailes(error);
+                Error err = new Error(context.getString(R.string.networkGeneralError));
+                listener.onResult(new Result<Course>(null, null, err));
+            }
+        };
+
+
+        StringRequest request = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("X-Parse-Application-Id", appId);
+                headers.put("X-Parse-REST-API-Key", apiKey);
+                return headers;
+            }
+
+
+        };
+        requestQueue.add(request);
+    }
+
+
+    // ************************************* Insert Course ****************************
+
+    public void insertCourse(final Course course, final User currUser, final ResultListener<Course> listener) {
         if (!isNetworkConnected()) {
             Error error = new Error(context.getString(R.string.networkConnectionError));
             listener.onResult(new Result<Course>(null, null, error));
@@ -248,7 +324,7 @@ public class NetworkHelper {
         }
 
 
-        String url = hostUrl + "/classes/transaction";
+        String url = hostUrl + "/classes/course";
         String expJson = null;
         try {
             expJson = gson.toJson(course);
@@ -262,7 +338,7 @@ public class NetworkHelper {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "Student insert response: " + response);
+                Log.d(TAG, "Course insert response: " + response);
                 if (TextUtils.isEmpty(response)) {
                     Error error = new Error(context.getString(R.string.networkGeneralError));
                     listener.onResult(new Result<Course>(null, null, error));
@@ -314,8 +390,8 @@ public class NetworkHelper {
     }
 
 
-    //Update Course
-    public void updateExpense(final Course course, final User currentUser, final ResultListener<Course> listener) {
+    //******************************************** Update Course ****************************
+    public void updateCourse(final Course course, final User currentUser, final ResultListener<Course> listener) {
         if (!isNetworkConnected()) {
             Error error = new Error(context.getString(R.string.networkGeneralError));
             listener.onResult(new Result<Course>(null, null, error));
@@ -388,8 +464,8 @@ public class NetworkHelper {
     }
 
 
-    //    Delete Course
-    public void deleteExpense(final Course course, final User currentUser, final ResultListener<Course> listener) {
+    // ************************************************* Delete Course **********************
+    public void deleteCourse(final Course course, final User currentUser, final ResultListener<Course> listener) {
         if (!isNetworkConnected()) {
             Error error = new Error(context.getString(R.string.networkGeneralError));
             listener.onResult(new Result<Course>(null, null, error));
