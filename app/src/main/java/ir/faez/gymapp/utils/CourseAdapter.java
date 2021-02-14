@@ -11,6 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
+import java.io.IOException;
 import java.util.List;
 
 import ir.faez.gymapp.R;
@@ -42,7 +45,11 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.setItemData(position);
+        try {
+            holder.setItemData(position);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -76,27 +83,30 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         }
 
 
-        public void setItemData(int position) {
+        public void setItemData(int position) throws IOException {
             this.position = position;
             Course course = courses.get(position);
 
-            switch (courses.get(position).getStatus()) {
-                case "RESERVED":
-                    itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.Robins_Egg_Blue));
-                    break;
-                case "NOT_RESERVED":
-                    itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.Hollywood_Cerise));
-                    break;
-            }
+//            switch (courses.get(position).getStatus()) {
+//                case "RESERVED":
+//                    itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.Robins_Egg_Blue));
+//                    break;
+//                case "NOT_RESERVED":
+//                    itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.Hollywood_Cerise));
+//                    break;
+//            }
 
             // setting item stringify data
-            exerciseTitle.setText(courses.get(position).getCourseTitle());
+            exerciseTitle.setText(course.getCourseTitle());
 
             String randomVariantNumber = Double.toString(Math.round(Math.random() * (100 - 20 + 1) + 20));
             exerciseType.setText(randomVariantNumber + " Workouts");
 
             String randomHourNumber = Double.toString(Math.round(Math.random() * (150 - 30 + 1) + 20));
             exerciseTime.setText(randomHourNumber + " Hour");
+
+            Glide.with(context).load(course.getPosterUrl()).into(courseIconIv);
+
         }
 
 

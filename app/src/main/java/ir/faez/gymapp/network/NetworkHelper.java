@@ -17,15 +17,13 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import ir.faez.gymapp.R;
 import ir.faez.gymapp.data.model.Course;
+import ir.faez.gymapp.data.model.ResultCourse;
 import ir.faez.gymapp.data.model.User;
 import ir.faez.gymapp.utils.Result;
 import ir.faez.gymapp.utils.ResultListener;
@@ -268,12 +266,15 @@ public class NetworkHelper {
                     return;
                 }
 
-                List<Course> resultCourse = null;
-
+                ResultCourse resultCourses = null;
 
                 try {
-                    resultCourse = gson.fromJson(response, new TypeToken<ArrayList<Course>>() {
+                    resultCourses = gson.fromJson(response, new TypeToken<ResultCourse>() {
                     }.getType());
+
+                    if (resultCourses.results == null) {
+                        return;
+                    }
 
 
                 } catch (Exception ex) {
@@ -283,7 +284,7 @@ public class NetworkHelper {
                     return;
                 }
 
-                listener.onResult(new Result<Course>(null, resultCourse, null));
+                listener.onResult(new Result<Course>(null, resultCourses.results, null));
             }
         };
 

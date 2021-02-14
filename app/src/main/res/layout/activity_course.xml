@@ -23,14 +23,12 @@
 
             >
 
-            <ImageView
+            <VideoView
+                android:id="@+id/course_video_vv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center|end"
-                android:layout_marginBottom="15dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/pilates"
-                app:layout_collapseMode="parallax" />
+
+                />
 
             <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
@@ -48,6 +46,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/course_desc_bg"
         android:padding="15dp"
+
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
 
@@ -56,33 +55,74 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/yoga" />
+                android:layout_marginTop="25dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+
+                >
+
+                <TextView
+                    android:id="@+id/course_title_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/baseline_fitness_center_black_24dp"
+                    android:text="YOGA"
+
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+
+                    />
+
+                <TextView
+                    android:id="@+id/course_price_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/baseline_monetization_on_black_24dp"
+                    android:text="price"
+
+                    app:layout_constraintLeft_toRightOf="@id/course_title_tv"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+
+                    />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/each_course_poster_curved_bg"
+                    android:backgroundTint="@color/softGreen"
+                    android:text="Reserve Course"
+                    android:textColor="@color/bone_bg"
+                    android:textSize="20sp"
+
+                    app:layout_constraintTop_toBottomOf="@+id/course_title_tv" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageView
+                android:id="@+id/course_poster_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:src="@drawable/yoga"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center"
+                />
 
             <TextView
+                android:id="@+id/course_desc_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:text="@string/loremipsom" />
         </LinearLayout>
 
 
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="30dp"
-        android:backgroundTint="@color/softGreen"
-        android:baselineAlignBottom="false"
-        android:clickable="true"
-        android:src="@drawable/baseline_add_shopping_cart_black_24dp"
-        app:fabSize="normal"
-        app:layout_anchor="@id/course_appbar"
-        app:layout_anchorGravity="end|bottom"
-
-
-        />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

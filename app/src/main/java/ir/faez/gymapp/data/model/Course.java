@@ -8,47 +8,48 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
+
 @Entity
-public class Course {
+public class Course implements Serializable {
 
     @PrimaryKey
     @NonNull
     @SerializedName("objectId")
     private String id;
     @ColumnInfo
+    @SerializedName("title")
     private String courseTitle;
     @ColumnInfo
+    @SerializedName("description")
     private String courseDesc;
     @ColumnInfo
-    private String ownerId;
+    private double price;
     @ColumnInfo
-    private String status;
-    // ADD Course video Field @TODO
+    @SerializedName("poster")
+    private String posterUrl;
+    @ColumnInfo
+    @SerializedName("video")
+    private String videoUrl;
 
-
-    public Course(@NonNull String id, String courseTitle, String courseDesc, String ownerId, String status) {
+    public Course(@NonNull String id, String courseTitle, String courseDesc, double price, String posterUrl, String videoUrl) {
         this.id = id;
         this.courseTitle = courseTitle;
         this.courseDesc = courseDesc;
-        this.ownerId = ownerId;
-        this.status = status;
-
+        this.price = price;
+        this.posterUrl = posterUrl;
+        this.videoUrl = videoUrl;
     }
+
 
     @Ignore
-    public Course(String courseTitle, String courseDesc, String ownerId, String status) {
+    public Course(String courseTitle, String courseDesc, double price, String posterUrl, String videoUrl) {
         this.courseTitle = courseTitle;
         this.courseDesc = courseDesc;
-        this.ownerId = ownerId;
-        this.status = status;
-    }
-
-    public String getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
+        this.price = price;
+        this.posterUrl = posterUrl;
+        this.videoUrl = videoUrl;
     }
 
     @NonNull
@@ -76,11 +77,28 @@ public class Course {
         this.courseDesc = courseDesc;
     }
 
-    public String getStatus() {
-        return status;
+
+    public double getPrice() {
+        return price;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getPosterUrl() {
+        return posterUrl;
+    }
+
+    public void setPosterUrl(String posterUrl) {
+        this.posterUrl = posterUrl;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
     }
 }

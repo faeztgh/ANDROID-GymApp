@@ -20,6 +20,6 @@ public interface CourseDao {
     @Query("DELETE FROM course where id= :id")
     int delete(String id);
 
-    @Query("SELECT * FROM course WHERE ownerId= :id")
-    List<Course> getAllCourses(String id);
+    @Query("SELECT * FROM course")
+    List<Course> getAllCourses();
 }

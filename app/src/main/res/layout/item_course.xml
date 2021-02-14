@@ -15,9 +15,9 @@
 
     <ImageView
         android:id="@+id/exercise_icon_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
+        android:layout_width="150dp"
+        android:layout_height="80dp"
+        android:background="@drawable/each_course_poster_curved_bg"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -43,13 +43,13 @@
         android:id="@+id/exercise_variant_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
+        android:drawableLeft="@drawable/baseline_fitness_center_black_24dp"
 
+        android:drawablePadding="7dp"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@id/exercise_time_tv"
         app:layout_constraintLeft_toRightOf="@id/vertical_middle_left_guid"
         app:layout_constraintTop_toBottomOf="@+id/exercise_title_tv"
-        android:drawableLeft="@drawable/baseline_fitness_center_black_24dp"
-        android:drawablePadding="7dp"
         tools:text="50 workout" />
 
 
@@ -57,17 +57,14 @@
         android:id="@+id/exercise_time_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
+        android:drawableLeft="@drawable/baseline_watch_later_black_24dp"
 
+        android:drawablePadding="7dp"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/vertical_middle_left_guid"
         app:layout_constraintTop_toBottomOf="@id/exercise_variant_tv"
-        android:drawablePadding="7dp"
-        android:drawableLeft="@drawable/baseline_watch_later_black_24dp"
         tools:text="36 hour" />
-
-
-
 
 
     <androidx.constraintlayout.widget.Guideline
