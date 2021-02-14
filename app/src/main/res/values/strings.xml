@@ -36,6 +36,8 @@
     <string name="home">Home</string>
     <string name="profile">Profile</string>
     <string name="logout">Logout</string>
+    <string name="addYourReview">Add your review ...</string>
+    <string name="addReview">Add  Review</string>
     <string name="about">About</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
@@ -87,4 +89,5 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="somethingWentWrongOnCheckUser">Something went wrong on Check for user existence:(</string>
     <string name="wrongUserNameOrPassword">Wrong username or password!</string>
     <string name="cannotGetUserFromDb"> Cannot get user from DB!</string>
+    <string name="cannotGetCoursesFromDb"> Cannot get courses from DB!</string>
 </resources>

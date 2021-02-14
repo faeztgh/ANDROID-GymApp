@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/ctr_bg">
@@ -17,11 +18,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
+            app:collapsedTitleTextAppearance="@color/white"
             app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleGravity="bottom"
+            app:expandedTitleTextAppearance="@color/white"
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
             app:title="@string/course"
-
-            >
+            app:titleEnabled="true">
 
             <VideoView
                 android:id="@+id/course_video_vv"
@@ -53,7 +56,19 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="15dp">
+
+            <TextView
+                android:layout_width="200dp"
+                android:layout_height="3dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/mineshaft_curve_btn"
+                android:backgroundTint="@color/gray"
+                android:gravity="center"
+
+                />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -68,8 +83,11 @@
                     android:id="@+id/course_title_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/baseline_fitness_center_black_24dp"
+                    android:drawableLeft="@drawable/baseline_title_black_24dp"
+                    android:drawablePadding="5dp"
                     android:text="YOGA"
+                    android:textColor="@color/mineShaft"
+
 
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -81,15 +99,46 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/baseline_monetization_on_black_24dp"
+                    android:drawablePadding="5dp"
                     android:text="price"
+                    android:textColor="@color/mineShaft"
 
-                    app:layout_constraintLeft_toRightOf="@id/course_title_tv"
-                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/vertical_middle_guid"
                     app:layout_constraintTop_toTopOf="parent"
 
                     />
 
+
+                <TextView
+                    android:id="@+id/exercise_variant_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:drawableLeft="@drawable/baseline_fitness_center_black_24dp"
+                    android:drawablePadding="5dp"
+                    android:textColor="@color/black"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/course_title_tv"
+                    tools:text="50 workout" />
+
+
+                <TextView
+                    android:id="@+id/exercise_time_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:drawableLeft="@drawable/baseline_watch_later_black_24dp"
+                    android:drawablePadding="5dp"
+                    android:textColor="@color/black"
+                    app:layout_constraintLeft_toRightOf="@id/vertical_middle_guid"
+                    app:layout_constraintTop_toBottomOf="@id/course_price_tv"
+                    tools:text="36 hour"
+
+
+                    />
+
                 <Button
+                    android:id="@+id/reserveOrunReserve_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -99,26 +148,95 @@
                     android:textColor="@color/bone_bg"
                     android:textSize="20sp"
 
-                    app:layout_constraintTop_toBottomOf="@+id/course_title_tv" />
+                    app:layout_constraintTop_toBottomOf="@id/horizontal_middle_guid"
 
 
+                    />
+
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/horizontal_middle_guid"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+
+                    app:layout_constraintGuide_percent="0.6"
+
+                    />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/vertical_middle_guid"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+
+                    app:layout_constraintGuide_percent="0.5"
+
+                    />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageView
                 android:id="@+id/course_poster_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="100dp"
-                android:src="@drawable/yoga"
-                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
                 android:layout_gravity="center"
-                />
+                android:layout_marginTop="20dp"
+                android:background="@drawable/ash_curve_btn"
+                android:backgroundTint="@color/white"
+                android:maxHeight="300dp"
+                android:minHeight="150dp"
+                android:src="@drawable/yoga" />
 
             <TextView
                 android:id="@+id/course_desc_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="@string/loremipsom" />
+                android:layout_marginBottom="10dp"
+                android:elevation="10dp"
+                android:text="salam"
+                android:textColor="@color/mineShaft" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/each_course_poster_curved_bg"
+                android:backgroundTint="@color/lightGray" />
+
+
+            <EditText
+                android:id="@+id/add_review_et"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/each_course_poster_curved_bg"
+                android:hint="@string/addYourReview"
+                android:padding="10dp"
+                android:textColorHint="@color/gray"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/submit_review_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/each_course_poster_curved_bg"
+                android:backgroundTint="@color/Amaranth"
+                android:text="@string/addReview"
+                android:textColor="@color/bone_bg"
+                android:textSize="20sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/course_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="15dp"
+                android:background="@color/bone_bg" />
         </LinearLayout>
 
 

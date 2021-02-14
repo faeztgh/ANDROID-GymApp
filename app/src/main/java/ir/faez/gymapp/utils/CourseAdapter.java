@@ -95,6 +95,8 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
 //                    itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.Hollywood_Cerise));
 //                    break;
 //            }
+            itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.cerulean));
+
 
             // setting item stringify data
             exerciseTitle.setText(course.getCourseTitle());

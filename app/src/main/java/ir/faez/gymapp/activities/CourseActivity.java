@@ -2,6 +2,7 @@ package ir.faez.gymapp.activities;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.MediaController;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +16,7 @@ public class CourseActivity extends AppCompatActivity {
 
     private ActivityCourseBinding binding;
     private Course course;
+    private MediaController mediaController;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,12 +45,23 @@ public class CourseActivity extends AppCompatActivity {
     private void settingUiElements() {
         binding.collapsingToolbar.setTitle(course.getCourseTitle());
         Glide.with(this).load(course.getPosterUrl()).into(binding.coursePosterIv);
-        binding.courseDescTv.setText(course.getCourseDesc());
+        binding.courseDescTv.setText("About " + course.getCourseTitle() + " : " + course.getCourseDesc());
         binding.courseTitleTv.setText("Title: " + course.getCourseTitle());
-        binding.coursePriceTv.setText("Price: " + course.getPrice());
+        binding.coursePriceTv.setText("Price: " + course.getPrice() + "$");
+
+        String randomVariantNumber = Double.toString(Math.round(Math.random() * (100 - 20 + 1) + 20));
+        binding.exerciseVariantTv.setText(randomVariantNumber + " Workouts");
+
+        String randomHourNumber = Double.toString(Math.round(Math.random() * (150 - 30 + 1) + 20));
+        binding.exerciseTimeTv.setText(randomHourNumber + " Hour");
 
         binding.courseVideoVv.setVideoPath(course.getVideoUrl());
         binding.courseVideoVv.start();
+        mediaController = new MediaController(this);
+        mediaController.setMediaPlayer(binding.courseVideoVv);
+        binding.courseVideoVv.setMediaController(mediaController);
+        binding.courseVideoVv.requestFocus();
+
 
     }
 

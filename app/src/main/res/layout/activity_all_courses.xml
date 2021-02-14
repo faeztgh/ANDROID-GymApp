@@ -5,12 +5,18 @@
     android:background="@color/bone_bg"
     android:orientation="vertical">
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/courses_recycler_view"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+       android:id="@+id/swipe_to_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/bone_bg"
+        android:layout_height="match_parent">
 
-        />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/courses_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/bone_bg"
+
+            />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

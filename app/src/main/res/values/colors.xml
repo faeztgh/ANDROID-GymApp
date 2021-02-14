@@ -6,6 +6,7 @@
     <color name="black">#000</color>
     <color name="white">#fff</color>
     <color name="gray">#676464</color>
+    <color name="lightGray">#DCD6D6</color>
     <color name="navyBlue">#B9000080</color>
     <color name="lightBlue">#DDE6FE</color>
     <color name="lightPink">#ffdde1</color>
@@ -23,4 +24,7 @@
     <color name="pinkish_red">#D65DB1</color>
     <color name="Hollywood_Cerise">#E30196</color>
     <color name="Robins_Egg_Blue">#00DBB4</color>
+    <color name="Amaranth">#E51C64</color>
+    <color name="cerulean">#00B4DB</color>
+
 </resources>

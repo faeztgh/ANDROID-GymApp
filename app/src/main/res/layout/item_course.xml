@@ -28,9 +28,10 @@
         android:id="@+id/exercise_title_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/baseline_title_black_24dp"
+        android:drawablePadding="5dp"
         android:textColor="@color/black"
         android:textSize="18sp"
-
         app:layout_constraintBottom_toTopOf="@id/exercise_variant_tv"
         app:layout_constraintLeft_toRightOf="@id/vertical_middle_left_guid"
         app:layout_constraintTop_toTopOf="parent"
@@ -43,8 +44,8 @@
         android:id="@+id/exercise_variant_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:drawableLeft="@drawable/baseline_fitness_center_black_24dp"
-
         android:drawablePadding="7dp"
         android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@id/exercise_time_tv"
@@ -57,6 +58,7 @@
         android:id="@+id/exercise_time_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:drawableLeft="@drawable/baseline_watch_later_black_24dp"
 
         android:drawablePadding="7dp"
