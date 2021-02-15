@@ -1,24 +1,23 @@
 package ir.faez.gymapp.data.async;
 
-
 import android.content.Context;
 import android.os.AsyncTask;
 
 import ir.faez.gymapp.R;
-import ir.faez.gymapp.data.db.DAO.CourseDao;
+import ir.faez.gymapp.data.db.DAO.CourseReservationDao;
 import ir.faez.gymapp.data.db.DAO.DbResponse;
 import ir.faez.gymapp.data.db.DbManager;
-import ir.faez.gymapp.data.model.Course;
+import ir.faez.gymapp.data.model.CourseReservation;
 import ir.faez.gymapp.utils.Action;
 
-public class CourseCudAsyncTask extends AsyncTask<Course, Void, Long> {
+public class CourseReservationCudAsyncTask extends AsyncTask<CourseReservation, Void, Long> {
     private Context context;
-    private CourseDao courseDao;
-    private Course course;
-    private DbResponse<Course> dbResponse;
+    private CourseReservationDao courseReservationDao;
+    private CourseReservation courseReservation;
+    private DbResponse<CourseReservation> dbResponse;
     private String action;
 
-    public CourseCudAsyncTask(Context context, String action, DbResponse<Course> dbResponse) {
+    public CourseReservationCudAsyncTask(Context context, String action, DbResponse<CourseReservation> dbResponse) {
         this.context = context;
         this.dbResponse = dbResponse;
         this.action = action;
@@ -28,40 +27,40 @@ public class CourseCudAsyncTask extends AsyncTask<Course, Void, Long> {
     protected void onPreExecute() {
         super.onPreExecute();
         DbManager dbManager = DbManager.getInstance((context));
-        courseDao = dbManager.courseDao();
+        courseReservationDao = dbManager.courseReservationDao();
 
     }
 
     @Override
-    protected Long doInBackground(Course... courses) {
-        course = courses[0];
+    protected Long doInBackground(CourseReservation... courseReservations) {
+        courseReservation = courseReservations[0];
 
         switch (action) {
             case Action.INSERT_ACTION:
 
-                return insertDoInBackground(courses);
+                return insertDoInBackground(courseReservations);
 
             case Action.UPDATE_ACTION:
 
-                return updateDoInBackground(courses);
+                return updateDoInBackground(courseReservations);
 
             case Action.DELETE_ACTION:
 
-                return deleteDoInBackground(course);
+                return deleteDoInBackground(courseReservations);
         }
         return null;
     }
 
-    private Long deleteDoInBackground(Course courses) {
-        return (long) courseDao.delete(course.getId());
+    private Long deleteDoInBackground(CourseReservation[] courseReservation) {
+        return (long) courseReservationDao.delete(courseReservation[0].getId());
     }
 
-    private Long updateDoInBackground(Course[] expenses) {
-        return (long) courseDao.update(course);
+    private Long updateDoInBackground(CourseReservation[] courseReservations) {
+        return (long) courseReservationDao.update(courseReservation);
     }
 
-    private Long insertDoInBackground(Course[] courses) {
-        return courseDao.insert(course);
+    private Long insertDoInBackground(CourseReservation[] courseReservations) {
+        return courseReservationDao.insert(courseReservation);
     }
 
     @Override
@@ -82,7 +81,7 @@ public class CourseCudAsyncTask extends AsyncTask<Course, Void, Long> {
 
     private void deletePostExecute(Long response) {
         if (response > 0) {
-            dbResponse.onSuccess(course);
+            dbResponse.onSuccess(courseReservation);
         } else {
             Error error = new Error(String.valueOf(R.string.somethingWentWrongOnDelete));
             dbResponse.onError(error);
@@ -92,18 +91,18 @@ public class CourseCudAsyncTask extends AsyncTask<Course, Void, Long> {
 
     private void updatePostExecute(Long affectedRows) {
         if (affectedRows > 0) {
-            dbResponse.onSuccess(course);
+            dbResponse.onSuccess(courseReservation);
         } else {
             Error error = new Error(String.valueOf(R.string.somethingWentWrongOnUpdate));
             dbResponse.onError(error);
         }
     }
 
-    private void insertPostExecute(Long courseId) {
+    private void insertPostExecute(Long courseReservationId) {
 
-        if (courseId > 0) {
-            course.setId(courseId.toString());
-            dbResponse.onSuccess(course);
+        if (courseReservationId > 0) {
+            courseReservation.setId(courseReservationId.toString());
+            dbResponse.onSuccess(courseReservation);
         } else {
             Error error = new Error(String.valueOf(R.string.somethingWentWrongOnInsert));
             dbResponse.onError(error);

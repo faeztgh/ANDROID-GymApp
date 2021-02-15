@@ -17,7 +17,7 @@
     <string name="dummy_weight">Weight: 75 KG</string>
 
     <string name="appTitle">Gym App</string>
-    <string name="username">UserName</string>
+    <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="register">Register</string>
     <string name="forgotPassword">Forgot Password?</string>
@@ -71,6 +71,8 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="exportingFileDoneSuccessfully">Exporting File Done Successfully!</string>
     <string name="importingFileDoneSuccessfully">Importing File Done Successfully!</string>
     <string name="externalStorageNotReadyToUse">External Storage Not Ready To Use!</string>
+    <string name="courseReservationAddedSuccessfully">Course Reservation added successfully</string>
+    <string name="sthWentWrongOnAddingCourseReservation">Something wrong on adding course reservation</string>
     <string name="fileNotExist">File Not Exist!</string>
     <string name="problemToReadFromFile">Problem To Read From File!</string>
     <string name="problemToWriteOnFile">Problem To Write On File!</string>

@@ -23,6 +23,7 @@ import java.util.Map;
 
 import ir.faez.gymapp.R;
 import ir.faez.gymapp.data.model.Course;
+import ir.faez.gymapp.data.model.CourseReservation;
 import ir.faez.gymapp.data.model.ResultCourse;
 import ir.faez.gymapp.data.model.User;
 import ir.faez.gymapp.utils.Result;
@@ -317,47 +318,49 @@ public class NetworkHelper {
 
     // ************************************* Insert Course ****************************
 
-    public void insertCourse(final Course course, final User currUser, final ResultListener<Course> listener) {
+    public void insertCourseReservation(final CourseReservation courseReservation, final User currUser,
+                                        final ResultListener<CourseReservation> listener) {
+
         if (!isNetworkConnected()) {
             Error error = new Error(context.getString(R.string.networkConnectionError));
-            listener.onResult(new Result<Course>(null, null, error));
+            listener.onResult(new Result<CourseReservation>(null, null, error));
             return;
         }
 
 
-        String url = hostUrl + "/classes/course";
+        String url = hostUrl + "/classes/CourseReservation";
         String expJson = null;
         try {
-            expJson = gson.toJson(course);
+            expJson = gson.toJson(courseReservation);
         } catch (Exception ex) {
             ex.printStackTrace();
             Error error = new Error(context.getString(R.string.networkJsonError));
-            listener.onResult(new Result<Course>(null, null, error));
+            listener.onResult(new Result<CourseReservation>(null, null, error));
             return;
         }
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "Course insert response: " + response);
+                Log.d(TAG, "Course reservation insert response: " + response);
                 if (TextUtils.isEmpty(response)) {
                     Error error = new Error(context.getString(R.string.networkGeneralError));
-                    listener.onResult(new Result<Course>(null, null, error));
+                    listener.onResult(new Result<CourseReservation>(null, null, error));
                     return;
                 }
 
-                Course resultExp = null;
+                CourseReservation courseReservationResult = null;
                 try {
-                    resultExp = gson.fromJson(response, new TypeToken<Course>() {
+                    courseReservationResult = gson.fromJson(response, new TypeToken<CourseReservation>() {
                     }.getType());
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     Error error = new Error(context.getString(R.string.networkJsonError));
-                    listener.onResult(new Result<Course>(null, null, error));
+                    listener.onResult(new Result<CourseReservation>(null, null, error));
                     return;
                 }
 
-                listener.onResult(new Result<Course>(resultExp, null, null));
+                listener.onResult(new Result<CourseReservation>(courseReservationResult, null, null));
             }
         };
         Response.ErrorListener errorListener = new Response.ErrorListener() {
@@ -365,7 +368,7 @@ public class NetworkHelper {
             public void onErrorResponse(VolleyError error) {
                 printVolleyErrorDetailes(error);
                 Error err = new Error(context.getString(R.string.networkGeneralError));
-                listener.onResult(new Result<Course>(null, null, err));
+                listener.onResult(new Result<CourseReservation>(null, null, err));
                 return;
             }
         };

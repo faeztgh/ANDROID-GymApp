@@ -17,29 +17,33 @@ public class CourseReservation {
     @ColumnInfo
     private String reservationCode;
     @ColumnInfo
-    private String courseStatus;
-    @ColumnInfo
-    private String userId;
+    private String status;
     @ColumnInfo
     private String courseId;
     @ColumnInfo
     private String ownerId;
 
-    public CourseReservation(@NonNull String id, String reservationCode, String courseStatus, String userId, String courseId, String ownerId) {
+    public CourseReservation(@NonNull String id, String reservationCode, String status, String courseId, String ownerId) {
         this.id = id;
         this.reservationCode = reservationCode;
-        this.courseStatus = courseStatus;
-        this.userId = userId;
+        this.status = status;
         this.courseId = courseId;
         this.ownerId = ownerId;
     }
 
     @Ignore
-    public CourseReservation(String reservationCode, String courseStatus, String userId, String courseId) {
+    public CourseReservation(String reservationCode, String status, String courseId, String ownerId) {
         this.reservationCode = reservationCode;
-        this.courseStatus = courseStatus;
-        this.userId = userId;
+        this.status = status;
         this.courseId = courseId;
+        this.ownerId = ownerId;
+    }
+
+    @Ignore
+    public CourseReservation(String status, String courseId, String ownerId) {
+        this.status = status;
+        this.courseId = courseId;
+        this.ownerId = ownerId;
     }
 
     public String getOwnerId() {
@@ -67,21 +71,14 @@ public class CourseReservation {
         this.reservationCode = reservationCode;
     }
 
-    public String getCourseStatus() {
-        return courseStatus;
+    public String getStatus() {
+        return status;
     }
 
-    public void setCourseStatus(String courseStatus) {
-        this.courseStatus = courseStatus;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 
     public String getCourseId() {
         return courseId;

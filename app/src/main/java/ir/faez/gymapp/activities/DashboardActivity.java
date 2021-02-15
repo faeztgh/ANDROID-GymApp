@@ -123,7 +123,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
                     public void onSuccess(User user) {
                         if (user != null) {
                             appData.setCurrentUser(null);
-                            moveTaskToBack(true);
+//                            moveTaskToBack(true);
                             finish();
                         }
                     }

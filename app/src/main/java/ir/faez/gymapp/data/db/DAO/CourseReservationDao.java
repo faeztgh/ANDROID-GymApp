@@ -2,6 +2,7 @@ package ir.faez.gymapp.data.db.DAO;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -12,7 +13,7 @@ import ir.faez.gymapp.data.model.CourseReservation;
 @Dao
 public interface CourseReservationDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insert(CourseReservation courseReservation);
 
     @Update

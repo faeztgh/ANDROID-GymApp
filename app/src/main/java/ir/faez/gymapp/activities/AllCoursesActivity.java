@@ -29,7 +29,7 @@ import ir.faez.gymapp.utils.ResultListener;
 
 public class AllCoursesActivity extends AppCompatActivity implements OnCourseClickListener {
 
-    private static final String TAG = "EXPENSE_ACTIVITY";
+    private static final String TAG = "ALL_COURSES_ACTIVITY";
     private static final int REQUEST_CODE = 1;
     private static final String EXTRA_COURSE = "EXTRA_COURSE";
     private ActivityAllCoursesBinding binding;
@@ -64,15 +64,14 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
         // getting courses from db if exist
         getAllCoursesFromDb();
 
-        invokeOnClickListeners();
 
         // implementing SwipeToRefresh
-        swipeToRepreshImp();
+        swipeToRefreshImp();
 
 
     }
 
-    private void swipeToRepreshImp() {
+    private void swipeToRefreshImp() {
 
         binding.swipeToRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -80,10 +79,6 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
                 getAllCoursesFromServerToDb();
             }
         });
-    }
-
-    private void invokeOnClickListeners() {
-
     }
 
     private void getAllCoursesFromServerToDb() {
@@ -107,7 +102,8 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
                         CourseCudAsyncTask courseCudAsyncTask = new CourseCudAsyncTask(getApplicationContext(), Action.INSERT_ACTION, new DbResponse<Course>() {
                             @Override
                             public void onSuccess(Course course) {
-
+                                getAllCoursesFromDb();
+                                binding.swipeToRefreshLayout.setRefreshing(false);
                             }
 
                             @Override
@@ -119,8 +115,7 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
                         courseCudAsyncTask.execute(cs);
                     }
                 }
-                getAllCoursesFromDb();
-                binding.swipeToRefreshLayout.setRefreshing(false);
+
             }
         });
     }
@@ -129,12 +124,13 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
         GetCoursesAsyncTask getCoursesAsyncTask = new GetCoursesAsyncTask(this, new DbResponse<List<Course>>() {
             @Override
             public void onSuccess(List<Course> courses) {
-                if (courses == null) {
+                if (courses.size() == 0 || courses == null) {
                     getAllCoursesFromServerToDb();
                 } else {
                     allCourses = courses;
                     recyclerViewInit();
                 }
+
             }
 
             @Override
