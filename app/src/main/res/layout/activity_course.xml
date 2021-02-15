@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:collapsedTitleTextAppearance="@color/white"
-            app:contentScrim="?attr/colorPrimary"
+            app:contentScrim="@color/Amaranth"
             app:expandedTitleGravity="bottom"
             app:expandedTitleTextAppearance="@color/white"
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
@@ -143,7 +143,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:background="@drawable/each_course_poster_curved_bg"
-                    android:backgroundTint="@color/softGreen"
+                    android:backgroundTint="@color/Robins_Egg_Blue"
                     android:text="Reserve Course"
                     android:textColor="@color/bone_bg"
                     android:textSize="20sp"
@@ -213,6 +213,7 @@
                 android:layout_height="90dp"
                 android:layout_marginTop="25dp"
                 android:background="@drawable/each_course_poster_curved_bg"
+                android:gravity="top"
                 android:hint="@string/addYourReview"
                 android:padding="10dp"
                 android:textColorHint="@color/gray"
@@ -231,8 +232,9 @@
                 android:textColor="@color/bone_bg"
                 android:textSize="20sp" />
 
+
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/course_recycler_view"
+                android:id="@+id/course_review_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="15dp"

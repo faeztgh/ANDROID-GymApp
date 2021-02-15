@@ -20,6 +20,6 @@ public interface ReviewDao {
     @Query("DELETE FROM review where id= :id")
     int delete(String id);
 
-    @Query("SELECT * FROM review WHERE ownerId= :id")
+    @Query("SELECT * FROM review WHERE courseId= :id")
     List<Review> getAllReviews(String id);
 }

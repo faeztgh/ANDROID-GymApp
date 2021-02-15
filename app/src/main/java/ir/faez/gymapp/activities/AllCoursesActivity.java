@@ -33,7 +33,6 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
     private static final int REQUEST_CODE = 1;
     private static final String EXTRA_COURSE = "EXTRA_COURSE";
     private ActivityAllCoursesBinding binding;
-    private ListHelper listHelper;
     private List<Course> allCourses;
     private NetworkHelper networkHelper;
     private CourseAdapter courseAdapter;
@@ -53,9 +52,6 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
         // initializing network helper
         networkHelper = NetworkHelper.getInstance(getApplicationContext());
 
-        // initializing list helper
-        listHelper = ListHelper.getInstance();
-
         // initializing binding
         binding = ActivityAllCoursesBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
@@ -63,7 +59,6 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
 
         // getting courses from db if exist
         getAllCoursesFromDb();
-
 
         // implementing SwipeToRefresh
         swipeToRefreshImp();
@@ -73,7 +68,7 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
 
     private void swipeToRefreshImp() {
 
-        binding.swipeToRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        binding.allCoursesSwipeToRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 getAllCoursesFromServerToDb();
@@ -90,7 +85,7 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
                 Error error = (result != null) ? result.getError() : null;
                 List<Course> courseList = (result != null) ? result.getItems() : null;
                 if ((result == null) || (error != null) || (result == null)) {
-                    String errMsg = (error != null) ? error.getMessage() : getString(R.string.cantSignInError);
+                    String errMsg = (error != null) ? error.getMessage() : getString(R.string.cannotGetCoursesFromServer);
                     Toast.makeText(AllCoursesActivity.this, errMsg, Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -99,11 +94,13 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
                 if (courseList != null) {
                     for (Course cs : courseList) {
 
-                        CourseCudAsyncTask courseCudAsyncTask = new CourseCudAsyncTask(getApplicationContext(), Action.INSERT_ACTION, new DbResponse<Course>() {
+                        CourseCudAsyncTask courseCudAsyncTask = new
+                                CourseCudAsyncTask(getApplicationContext(), Action.INSERT_ACTION,
+                                new DbResponse<Course>() {
                             @Override
                             public void onSuccess(Course course) {
                                 getAllCoursesFromDb();
-                                binding.swipeToRefreshLayout.setRefreshing(false);
+                                binding.allCoursesSwipeToRefreshLayout.setRefreshing(false);
                             }
 
                             @Override
@@ -115,13 +112,13 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
                         courseCudAsyncTask.execute(cs);
                     }
                 }
-
             }
         });
     }
 
     private void getAllCoursesFromDb() {
-        GetCoursesAsyncTask getCoursesAsyncTask = new GetCoursesAsyncTask(this, new DbResponse<List<Course>>() {
+        GetCoursesAsyncTask getCoursesAsyncTask = new GetCoursesAsyncTask(this,
+                new DbResponse<List<Course>>() {
             @Override
             public void onSuccess(List<Course> courses) {
                 if (courses.size() == 0 || courses == null) {

@@ -15,45 +15,42 @@ public class Review {
     @SerializedName("objectId")
     private String id;
     @ColumnInfo
-    private String reviewDate;
+    private String dateTime;
     @ColumnInfo
-    private String reviewTime;
+    private String text;
     @ColumnInfo
-    private String reviewText;
-    @ColumnInfo
-    private String reviewOwner;
-    @ColumnInfo
-    private String reviewCourse;
+    private String courseId;
     @ColumnInfo
     private String ownerId;
+    @ColumnInfo
+    private String ownerFullName;
 
-    public Review(@NonNull String id, String reviewDate, String reviewTime, String reviewText, String reviewOwner, String reviewCourse, String ownerId) {
+
+    public Review(@NonNull String id, String dateTime, String text, String courseId, String ownerId, String ownerFullName) {
         this.id = id;
-        this.reviewDate = reviewDate;
-        this.reviewTime = reviewTime;
-        this.reviewText = reviewText;
-        this.reviewOwner = reviewOwner;
-        this.reviewCourse = reviewCourse;
+        this.dateTime = dateTime;
+        this.text = text;
+        this.courseId = courseId;
         this.ownerId = ownerId;
+        this.ownerFullName = ownerFullName;
     }
 
     @Ignore
-    public Review(String reviewDate, String reviewTime, String reviewText, String reviewOwner, String reviewCourse,String ownerId) {
-        this.reviewDate = reviewDate;
-        this.reviewTime = reviewTime;
-        this.reviewText = reviewText;
-        this.reviewOwner = reviewOwner;
-        this.reviewCourse = reviewCourse;
+    public Review(String dateTime, String text, String courseId, String ownerId, String ownerFullName) {
+        this.dateTime = dateTime;
+        this.text = text;
+        this.courseId = courseId;
         this.ownerId = ownerId;
-
+        this.ownerFullName = ownerFullName;
     }
 
-    public String getOwnerId() {
-        return ownerId;
+
+    public String getOwnerFullName() {
+        return ownerFullName;
     }
 
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
+    public void setOwnerFullName(String ownerFullName) {
+        this.ownerFullName = ownerFullName;
     }
 
     @NonNull
@@ -65,43 +62,35 @@ public class Review {
         this.id = id;
     }
 
-    public String getReviewDate() {
-        return reviewDate;
+    public String getDateTime() {
+        return dateTime;
     }
 
-    public void setReviewDate(String reviewDate) {
-        this.reviewDate = reviewDate;
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
     }
 
-    public String getReviewTime() {
-        return reviewTime;
+    public String getText() {
+        return text;
     }
 
-    public void setReviewTime(String reviewTime) {
-        this.reviewTime = reviewTime;
+    public void setText(String text) {
+        this.text = text;
     }
 
-    public String getReviewText() {
-        return reviewText;
+    public String getCourseId() {
+        return courseId;
     }
 
-    public void setReviewText(String reviewText) {
-        this.reviewText = reviewText;
+    public void setCourseId(String courseId) {
+        this.courseId = courseId;
     }
 
-    public String getReviewOwner() {
-        return reviewOwner;
+    public String getOwnerId() {
+        return ownerId;
     }
 
-    public void setReviewOwner(String reviewOwner) {
-        this.reviewOwner = reviewOwner;
-    }
-
-    public String getReviewCourse() {
-        return reviewCourse;
-    }
-
-    public void setReviewCourse(String reviewCourse) {
-        this.reviewCourse = reviewCourse;
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 }
