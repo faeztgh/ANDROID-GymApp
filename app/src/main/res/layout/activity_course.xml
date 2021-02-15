@@ -48,8 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/course_desc_bg"
-        android:padding="15dp"
-
+        android:padding="10dp"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
 
@@ -57,7 +56,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="15dp">
+            android:paddingLeft="15dp"
+            android:paddingTop="10dp"
+            android:paddingRight="15dp">
 
             <TextView
                 android:layout_width="200dp"
@@ -180,7 +181,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/ash_curve_btn"
                 android:backgroundTint="@color/white"
                 android:maxHeight="300dp"
@@ -191,7 +194,9 @@
                 android:id="@+id/course_desc_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
                 android:elevation="10dp"
                 android:text="salam"

@@ -80,6 +80,7 @@
     <string name="cannotGetCoursesFromServer">Cannot get courses from server</string>
     <string name="cannotGetReviewsFromServer">Cannot get reviews from server</string>
     <string name="cannotGetReviewsFromDb">Cannot get reviews from Db</string>
+    <string name="noReviewFound">No Review</string>
 
     <string name="successfulRegister">You Signed up Successfully!</string>
     <string name="successfullAddingReview">Review added successfully!</string>

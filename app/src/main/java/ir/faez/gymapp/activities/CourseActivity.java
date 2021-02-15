@@ -115,6 +115,8 @@ public class CourseActivity extends AppCompatActivity implements View.OnClickLis
                         });
                         reviewCudAsyncTask.execute(rv);
                     }
+                } else {
+                    Toast.makeText(appData, R.string.noReviewFound, Toast.LENGTH_SHORT).show();
                 }
             }
         });
