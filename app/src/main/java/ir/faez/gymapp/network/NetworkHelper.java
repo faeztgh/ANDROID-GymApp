@@ -25,6 +25,7 @@ import ir.faez.gymapp.R;
 import ir.faez.gymapp.data.model.Course;
 import ir.faez.gymapp.data.model.CourseReservation;
 import ir.faez.gymapp.data.model.ResultCourse;
+import ir.faez.gymapp.data.model.ResultCourseReservation;
 import ir.faez.gymapp.data.model.ResultReviews;
 import ir.faez.gymapp.data.model.Review;
 import ir.faez.gymapp.data.model.User;
@@ -211,7 +212,6 @@ public class NetworkHelper {
                 listener.onResult(new Result<User>(resultUser, null, null));
             }
         };
-
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -473,7 +473,7 @@ public class NetworkHelper {
     }
 
 
-    //******************************************** Get All Reviews ****************************
+    //******************************************** Get All Reviews *********************************
     public void getAllReviews(final ResultListener<Review> listener) {
         if (!isNetworkConnected()) {
             Error error = new Error(context.getString(R.string.networkGeneralError));
@@ -539,6 +539,158 @@ public class NetworkHelper {
             }
 
 
+        };
+        requestQueue.add(request);
+    }
+
+
+    //*************************************** Get Specific CourseReservation ***********************
+
+
+    public void getSpecificCourseReservation(final User user, final ResultListener<CourseReservation> listener) {
+        if (!isNetworkConnected()) {
+            Error error = new Error(context.getString(R.string.networkGeneralError));
+            listener.onResult(new Result<CourseReservation>(null, null, error));
+            return;
+        }
+
+
+        String url = hostUrl + "/classes/CourseReservation?where={\"ownerId\":\"" + user.getId() + "\"}";
+        String specificCourseReservationJson = null;
+
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Get Specific CourseReservation response: " + response);
+                if (TextUtils.isEmpty(response)) {
+                    Error error = new Error(context.getString(R.string.networkGeneralError));
+                    listener.onResult(new Result<CourseReservation>(null, null, error));
+                    return;
+                }
+
+                ResultCourseReservation resultCourseReservation = null;
+                try {
+                    resultCourseReservation = gson.fromJson(response, new TypeToken<ResultCourseReservation>() {
+                    }.getType());
+
+
+                    if (resultCourseReservation.results == null) {
+                        return;
+                    }
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    Error error = new Error(context.getString(R.string.networkJsonError));
+                    listener.onResult(new Result<CourseReservation>(null, null, error));
+                    return;
+                }
+
+                listener.onResult(new Result<CourseReservation>(null, resultCourseReservation.results, null));
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                printVolleyErrorDetailes(error);
+                Error err = new Error(context.getString(R.string.networkGeneralError));
+                listener.onResult(new Result<CourseReservation>(null, null, err));
+            }
+        };
+
+        final String jsonStr = specificCourseReservationJson;
+
+        StringRequest request = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("X-Parse-Application-Id", appId);
+                headers.put("X-Parse-REST-API-Key", apiKey);
+                headers.put("X-Parse-Session-Token", user.getSessionToken());
+
+                return headers;
+            }
+
+
+        };
+        requestQueue.add(request);
+    }
+
+    //  ********************************************  Delete Reservation **************************
+    public void deleteCourseReservation(final CourseReservation courseReservation, final User currentUser,
+                                        final ResultListener<CourseReservation> listener) {
+        if (!isNetworkConnected()) {
+            Error error = new Error(context.getString(R.string.networkGeneralError));
+            listener.onResult(new Result<CourseReservation>(null, null, error));
+            return;
+        }
+
+        String url = hostUrl + "/classes/CourseReservation/" + courseReservation.getId();
+        String courseReservationJson = null;
+        try {
+            courseReservationJson = gson.toJson(courseReservation);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Error error = new Error(context.getString(R.string.networkJsonError));
+            listener.onResult(new Result<CourseReservation>(null, null, error));
+            return;
+        }
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "CourseReservation delete response: " + response);
+                if (TextUtils.isEmpty(response)) {
+                    Error error = new Error(context.getString(R.string.networkGeneralError));
+                    listener.onResult(new Result<CourseReservation>(null, null, error));
+                    return;
+                }
+
+                CourseReservation resultCourseReservation = null;
+                try {
+                    resultCourseReservation = gson.fromJson(response, new TypeToken<CourseReservation>() {
+                    }.getType());
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    Error error = new Error(context.getString(R.string.networkJsonError));
+                    listener.onResult(new Result<CourseReservation>(null, null, error));
+                    return;
+                }
+
+                listener.onResult(new Result<CourseReservation>(resultCourseReservation,
+                        null, null));
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                printVolleyErrorDetailes(error);
+                Error err = new Error(context.getString(R.string.networkGeneralError));
+                listener.onResult(new Result<CourseReservation>(null, null, err));
+            }
+        };
+
+        final String jsonStr = courseReservationJson;
+        StringRequest request = new StringRequest(Request.Method.DELETE, url,
+                responseListener, errorListener) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("X-Parse-Application-Id", appId);
+                headers.put("X-Parse-REST-API-Key", apiKey);
+                headers.put("X-Parse-Session-Token", currentUser.getSessionToken());
+                return headers;
+            }
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                return jsonStr.getBytes(StandardCharsets.UTF_8);
+            }
         };
         requestQueue.add(request);
     }

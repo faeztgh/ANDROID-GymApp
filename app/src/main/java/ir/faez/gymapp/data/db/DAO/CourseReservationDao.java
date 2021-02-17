@@ -19,9 +19,12 @@ public interface CourseReservationDao {
     @Update
     int update(CourseReservation courseReservation);
 
-    @Query("DELETE FROM courseReservation where id= :id")
+    @Query("DELETE FROM courseReservation where courseId= :id")
     int delete(String id);
 
     @Query("SELECT * FROM courseReservation WHERE ownerId= :id")
-    List<CourseReservation> getAllcourseReservations(String id);
+    List<CourseReservation> getCourseReservationByOwnerId(String id);
+
+    @Query("SELECT * FROM courseReservation WHERE courseId= :id")
+    List<CourseReservation> getCourseReservationByCourseId(String id);
 }

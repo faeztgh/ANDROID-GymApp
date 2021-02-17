@@ -80,10 +80,16 @@
     <string name="cannotGetCoursesFromServer">Cannot get courses from server</string>
     <string name="cannotGetReviewsFromServer">Cannot get reviews from server</string>
     <string name="cannotGetReviewsFromDb">Cannot get reviews from Db</string>
+    <string name="cannotGetUserCourseReservationFromDb">Cannot get user course reservation from Db</string>
+    <string name="cannotGetUserCourseReservationFromServer">Cannot get user course reservation from Server</string>
     <string name="noReviewFound">No Review</string>
+    <string name="reload">Reload</string>
+    <string name="pending">Pending</string>
+    <string name="reserveCourse">Reserve Course</string>
 
     <string name="successfulRegister">You Signed up Successfully!</string>
     <string name="successfullAddingReview">Review added successfully!</string>
+    <string name="courseRemovedSuccessfully">Course removed successfully!</string>
     <string name="cantGetUsersFromDb">Can\'t read users from Db!</string>
     <string name="cantSignUpError">Can\'t sign up, please try again!</string>
     <string name="cantSignInError">Can\'t sign in, please try again!</string>

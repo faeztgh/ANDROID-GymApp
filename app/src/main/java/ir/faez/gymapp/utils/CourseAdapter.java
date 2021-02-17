@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import ir.faez.gymapp.R;
@@ -24,8 +26,11 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
     // Instance fields
     private Context context;
     private List<Course> courses;
+    private HashMap<Course, String> courseListAndStatus;
     private LayoutInflater layoutInflater;
     private OnCourseClickListener onCourseClickListener;
+    private String status;
+
 
     // Constructor
     public CourseAdapter(Context context, List<Course> courses,
@@ -34,6 +39,17 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         this.courses = courses;
         this.onCourseClickListener = onCourseClickListener;
         this.layoutInflater = LayoutInflater.from(context);
+    }
+
+
+    // Constructor
+
+    public CourseAdapter(Context context, HashMap<Course, String> courseListAndStatus,
+                         OnCourseClickListener onCourseClickListener) {
+        this.context = context;
+        this.onCourseClickListener = onCourseClickListener;
+        this.layoutInflater = LayoutInflater.from(context);
+        this.courseListAndStatus = courseListAndStatus;
     }
 
     @NonNull
@@ -54,7 +70,10 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        return courses.size();
+        if (courses != null) {
+            return courses.size();
+        }
+        return courseListAndStatus != null ? courseListAndStatus.size() : null;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -63,6 +82,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         public TextView exerciseTitle;
         public TextView exerciseType;
         public TextView exerciseTime;
+        public TextView statusRibbon;
         private int position;
         private Course course;
 
@@ -74,6 +94,8 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
             exerciseTitle = itemView.findViewById(R.id.exercise_title_tv);
             exerciseType = itemView.findViewById(R.id.exercise_variant_tv);
             exerciseTime = itemView.findViewById(R.id.exercise_time_tv);
+            statusRibbon = itemView.findViewById(R.id.myCourse_ribbon_tv);
+
 
             invokeOnClickListeners();
         }
@@ -85,8 +107,24 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
 
         public void setItemData(int position) throws IOException {
             this.position = position;
-            Course course = courses.get(position);
 
+            if (courseListAndStatus != null) {
+                course = (new ArrayList<Course>(courseListAndStatus.keySet())).get(position);
+                status = (new ArrayList<String>(courseListAndStatus.values())).get(position);
+                if (status.equals(Status.PENDING)) {
+                    itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.Corn));
+                }
+                if (status.equals(Status.RESERVED)) {
+                    itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.Robins_Egg_Blue));
+                    statusRibbon.setBackgroundTintList(context.getResources().getColorStateList(R.color.Chartreuse));
+                    statusRibbon.setText("Reserved");
+                }
+            }
+
+
+            if (courses != null) {
+                statusRibbon.setVisibility(View.INVISIBLE);
+                course = courses.get(position);
 //            switch (courses.get(position).getStatus()) {
 //                case "RESERVED":
 //                    itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.Robins_Egg_Blue));
@@ -95,20 +133,19 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
 //                    itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.Hollywood_Cerise));
 //                    break;
 //            }
-            itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.cerulean));
+                itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.cerulean));
+
+            }
 
 
             // setting item stringify data
             exerciseTitle.setText(course.getCourseTitle());
-
             String randomVariantNumber = Double.toString(Math.round(Math.random() * (100 - 20 + 1) + 20));
             exerciseType.setText(randomVariantNumber + " Workouts");
-
             String randomHourNumber = Double.toString(Math.round(Math.random() * (150 - 30 + 1) + 20));
             exerciseTime.setText(randomHourNumber + " Hour");
 
             Glide.with(context).load(course.getPosterUrl()).into(courseIconIv);
-
         }
 
 
@@ -116,7 +153,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.item_layout_constraint:
-                    onCourseClickListener.onCourseClicked(course, position);
+                    onCourseClickListener.onCourseClicked(course, position, status);
                     break;
             }
         }

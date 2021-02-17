@@ -115,7 +115,6 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
     }
 
 
-
     private void logoutHandler() {
         UserCudAsyncTask userCudAsyncTask = new UserCudAsyncTask(this, Action.UPDATE_ACTION,
                 new DbResponse<User>() {
@@ -123,8 +122,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
                     public void onSuccess(User user) {
                         if (user != null) {
                             appData.setCurrentUser(null);
-//                            moveTaskToBack(true);
-                            finish();
+                            exitFromAppHandler();
                         }
                     }
 
@@ -160,7 +158,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 
                 break;
             case R.id.my_courses_iv:
-                Toast.makeText(this, R.string.optionNotImplYet, Toast.LENGTH_SHORT).show();
+                myCoursesHandler();
 
                 break;
             case R.id.profile_iv:
@@ -187,6 +185,11 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
             default:
                 Toast.makeText(this, R.string.somethingWentWrong, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void myCoursesHandler() {
+        Intent intent = new Intent(getApplicationContext(), MyCourseActivity.class);
+        startActivity(intent);
     }
 
     //************************************* Navigation Handlers ******************************************

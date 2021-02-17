@@ -1,8 +1,10 @@
 package ir.faez.gymapp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.MediaController;
 import android.widget.Toast;
 
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -36,8 +39,8 @@ import ir.faez.gymapp.utils.ReviewAdapter;
 import ir.faez.gymapp.utils.Status;
 
 public class CourseActivity extends AppCompatActivity implements View.OnClickListener {
+    public static final String DELETE_EXTRA_MESSAGE = "DELETED_COURSE";
     private static final String TAG = "COURSE_RESERVATION";
-
     private ActivityCourseBinding binding;
     private Course course;
     private MediaController mediaController;
@@ -45,6 +48,8 @@ public class CourseActivity extends AppCompatActivity implements View.OnClickLis
     private NetworkHelper networkHelper;
     private List<Review> reviewList;
     private ReviewAdapter reviewAdapter;
+    private String status;
+    private CourseReservation courseReservation;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,6 +70,8 @@ public class CourseActivity extends AppCompatActivity implements View.OnClickLis
 
         // init course obj
         course = (Course) getIntent().getSerializableExtra("EXTRA_COURSE");
+        //init course status
+        status = getIntent().getStringExtra("EXTRA_STATUS");
 
         // init app data
         appData = (AppData) getApplication();
@@ -85,6 +92,12 @@ public class CourseActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
+
+    private void invokeOnClickListeners() {
+        binding.reserveOrunReserveBtn.setOnClickListener(this);
+        binding.submitReviewBtn.setOnClickListener(this);
+        binding.reloadReviewsBtn.setOnClickListener(this);
+    }
 
     private void getAllReviewsFromServerToDb() {
         networkHelper.getAllReviews(new ResultListener<Review>() {
@@ -146,13 +159,19 @@ public class CourseActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
-    private void invokeOnClickListeners() {
-        binding.reserveOrunReserveBtn.setOnClickListener(this);
-        binding.submitReviewBtn.setOnClickListener(this);
-    }
 
     // setting UI elements
     private void settingUiElements() {
+
+        if (status != null) {
+            if (status.equals(Status.PENDING)) {
+                binding.reserveOrunReserveBtn.setVisibility(View.GONE);
+            } else if (status.equals(Status.RESERVED)) {
+                binding.reserveOrunReserveBtn.setText("Delete Course");
+                binding.reserveOrunReserveBtn.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.Hollywood_Cerise));
+            }
+        }
+
         binding.collapsingToolbar.setTitle(course.getCourseTitle());
         Glide.with(this).load(course.getPosterUrl()).into(binding.coursePosterIv);
         binding.courseDescTv.setText("About " + course.getCourseTitle() + " : " + course.getCourseDesc());
@@ -189,6 +208,12 @@ public class CourseActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.submit_review_btn:
                 addReviewBtnHandler();
                 break;
+            case R.id.reload_reviews_btn:
+                getAllReviewsFromServerToDb();
+                binding.reloadReviewsBtn.animate().rotationBy(360).setDuration(1000)
+                        .setInterpolator(new LinearInterpolator()).start();
+                break;
+
             default:
                 Toast.makeText(this, R.string.somethingWentWrong, Toast.LENGTH_SHORT).show();
         }
@@ -212,52 +237,112 @@ public class CourseActivity extends AppCompatActivity implements View.OnClickLis
                 }
                 getAllReviewsFromDb();
                 Toast.makeText(CourseActivity.this, R.string.successfullAddingReview, Toast.LENGTH_SHORT).show();
+                binding.addReviewEt.setText("");
             }
         });
     }
 
 
     private void reserveOrDeleteCourseBtnHandler() {
-        CourseReservation courseReservation = new CourseReservation(Status.PENDING, course.getId(),
-                appData.getCurrentUser().getId());
 
+        for (CourseReservation cr : appData.getAllCourseReservations()) {
+            if (cr.getCourseId().equals(course.getId())) {
+                courseReservation = cr;
+            }
+        }
 
-        networkHelper.insertCourseReservation(courseReservation, appData.getCurrentUser(),
-                new ResultListener<CourseReservation>() {
-                    @Override
-                    public void onResult(Result<CourseReservation> result) {
-                        Log.d(TAG, "Result of add course reservation in server" + result);
-                        Error error = (result != null) ? result.getError() : null;
-                        CourseReservation crResult = result != null ? result.getItem() : null;
-                        if ((result == null) || (error != null)) {
-                            String errMsg = (error != null) ? error.getMessage() : getString(R.string.somethingWentWrongOnInsert);
-                            Toast.makeText(CourseActivity.this, errMsg, Toast.LENGTH_SHORT).show();
-                            return;
-                        }
+        if (courseReservation != null) {
+            if (binding.reserveOrunReserveBtn.getText().toString().trim().
+                    equalsIgnoreCase("Delete Course")) {
 
-                        courseReservation.setId(crResult.getId());
-                        courseReservation.setReservationCode(crResult.getReservationCode());
-                        courseReservation.setStatus(crResult.getStatus());
-
-                        CourseReservationCudAsyncTask courseReservationCudAsyncTask = new CourseReservationCudAsyncTask(getApplicationContext(), Action.INSERT_ACTION, new DbResponse<CourseReservation>() {
+                networkHelper.deleteCourseReservation(courseReservation, appData.getCurrentUser(),
+                        new ResultListener<CourseReservation>() {
                             @Override
-                            public void onSuccess(CourseReservation courseReservation) {
-                                if (courseReservation == null) {
+                            public void onResult(Result<CourseReservation> result) {
+                                Log.d(TAG, "Result of deleting CourseReservation in server:  " + result);
+                                Error error = result != null ? result.getError() : null;
+                                CourseReservation courseReservationResult = result != null ? result.getItem() : null;
+
+                                if (result == null || courseReservationResult == null || error != null) {
+                                    String errorMsg = error != null ? error.getMessage() : getString(R.string.somethingWentWrongOnDelete);
+                                    Toast.makeText(CourseActivity.this, errorMsg,
+                                            Toast.LENGTH_SHORT).show();
                                     return;
                                 }
-                                Toast.makeText(CourseActivity.this, R.string.courseReservationAddedSuccessfully, Toast.LENGTH_SHORT).show();
-                                finish();
-                            }
 
-                            @Override
-                            public void onError(Error error) {
-                                Toast.makeText(CourseActivity.this, R.string.sthWentWrongOnAddingCourseReservation, Toast.LENGTH_SHORT).show();
+
+                                // Removing from DB
+                                CourseReservationCudAsyncTask courseReservationCudAsyncTask =
+                                        new CourseReservationCudAsyncTask(CourseActivity.this,
+                                                Action.DELETE_ACTION, new DbResponse<CourseReservation>() {
+                                            @Override
+                                            public void onSuccess(CourseReservation courseReservation) {
+                                                Toast.makeText(CourseActivity.this, R.string.courseRemovedSuccessfully, Toast.LENGTH_SHORT).show();
+                                                Intent intent = new Intent();
+                                                intent.putExtra(DELETE_EXTRA_MESSAGE, courseReservation);
+                                                setResult(RESULT_OK, intent);
+                                                finish();
+
+                                            }
+
+                                            @Override
+                                            public void onError(Error error) {
+                                                Toast.makeText(CourseActivity.this, error.getMessage(),
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                if (courseReservation != null) {
+                                    courseReservationCudAsyncTask.execute(courseReservation);
+                                }
                             }
                         });
-                        courseReservationCudAsyncTask.execute(courseReservation);
-                    }
-                });
+            }
+        }
 
+
+        if (binding.reserveOrunReserveBtn.getText().toString().trim().
+                equalsIgnoreCase("Reserve Course")) {
+
+            CourseReservation courseReservation = new CourseReservation(Status.PENDING, course.getId(),
+                    appData.getCurrentUser().getId());
+
+
+            networkHelper.insertCourseReservation(courseReservation, appData.getCurrentUser(),
+                    new ResultListener<CourseReservation>() {
+                        @Override
+                        public void onResult(Result<CourseReservation> result) {
+                            Log.d(TAG, "Result of add course reservation in server" + result);
+                            Error error = (result != null) ? result.getError() : null;
+                            CourseReservation crResult = result != null ? result.getItem() : null;
+                            if ((result == null) || (error != null)) {
+                                String errMsg = (error != null) ? error.getMessage() : getString(R.string.somethingWentWrongOnInsert);
+                                Toast.makeText(CourseActivity.this, errMsg, Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+
+                            courseReservation.setId(crResult.getId());
+                            courseReservation.setReservationCode(crResult.getReservationCode());
+                            courseReservation.setStatus(crResult.getStatus());
+
+                            CourseReservationCudAsyncTask courseReservationCudAsyncTask = new CourseReservationCudAsyncTask(getApplicationContext(), Action.INSERT_ACTION, new DbResponse<CourseReservation>() {
+                                @Override
+                                public void onSuccess(CourseReservation courseReservation) {
+                                    if (courseReservation == null) {
+                                        return;
+                                    }
+                                    Toast.makeText(CourseActivity.this, R.string.courseReservationAddedSuccessfully, Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
+
+                                @Override
+                                public void onError(Error error) {
+                                    Toast.makeText(CourseActivity.this, R.string.sthWentWrongOnAddingCourseReservation, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            courseReservationCudAsyncTask.execute(courseReservation);
+                        }
+                    });
+        }
     }
 
 

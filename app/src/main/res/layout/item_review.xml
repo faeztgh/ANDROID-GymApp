@@ -4,10 +4,10 @@
     android:id="@+id/review_layout_constraint"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="4dp"
+    android:layout_marginTop="5dp"
     android:background="@drawable/review_stroked_white_bg"
     android:padding="5dp"
-    android:elevation="20dp"
+    android:elevation="2dp"
     >
 
     <TextView
@@ -43,7 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:textColor="@color/gray"
+        android:textColor="@color/mineShaft"
         android:textSize="13sp"
         android:padding="5dp"
 

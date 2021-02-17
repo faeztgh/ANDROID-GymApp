@@ -17,12 +17,12 @@ import ir.faez.gymapp.R;
 import ir.faez.gymapp.data.async.CourseCudAsyncTask;
 import ir.faez.gymapp.data.async.GetCoursesAsyncTask;
 import ir.faez.gymapp.data.db.DAO.DbResponse;
+import ir.faez.gymapp.data.db.DbHelper;
 import ir.faez.gymapp.data.model.Course;
 import ir.faez.gymapp.databinding.ActivityAllCoursesBinding;
 import ir.faez.gymapp.network.NetworkHelper;
 import ir.faez.gymapp.utils.Action;
 import ir.faez.gymapp.utils.CourseAdapter;
-import ir.faez.gymapp.utils.ListHelper;
 import ir.faez.gymapp.utils.OnCourseClickListener;
 import ir.faez.gymapp.utils.Result;
 import ir.faez.gymapp.utils.ResultListener;
@@ -30,12 +30,13 @@ import ir.faez.gymapp.utils.ResultListener;
 public class AllCoursesActivity extends AppCompatActivity implements OnCourseClickListener {
 
     private static final String TAG = "ALL_COURSES_ACTIVITY";
-    private static final int REQUEST_CODE = 1;
     private static final String EXTRA_COURSE = "EXTRA_COURSE";
+    private static final int REQUEST_CODE = 1;
     private ActivityAllCoursesBinding binding;
     private List<Course> allCourses;
     private NetworkHelper networkHelper;
     private CourseAdapter courseAdapter;
+    private DbHelper dbHelper;
 
 
     @Override
@@ -47,8 +48,6 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
 
 
     private void init() {
-
-
         // initializing network helper
         networkHelper = NetworkHelper.getInstance(getApplicationContext());
 
@@ -76,6 +75,8 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
         });
     }
 
+
+    // load all courses from server to database
     private void getAllCoursesFromServerToDb() {
 
         networkHelper.getAllCourses(new ResultListener<Course>() {
@@ -90,25 +91,24 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
                     return;
                 }
 
-
                 if (courseList != null) {
                     for (Course cs : courseList) {
 
                         CourseCudAsyncTask courseCudAsyncTask = new
                                 CourseCudAsyncTask(getApplicationContext(), Action.INSERT_ACTION,
                                 new DbResponse<Course>() {
-                            @Override
-                            public void onSuccess(Course course) {
-                                getAllCoursesFromDb();
-                                binding.allCoursesSwipeToRefreshLayout.setRefreshing(false);
-                            }
+                                    @Override
+                                    public void onSuccess(Course course) {
+                                        getAllCoursesFromDb();
+                                        binding.allCoursesSwipeToRefreshLayout.setRefreshing(false);
+                                    }
 
-                            @Override
-                            public void onError(Error error) {
-                                Toast.makeText(AllCoursesActivity.this,
-                                        R.string.somethingWentWrongOnInsert, Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                                    @Override
+                                    public void onError(Error error) {
+                                        Toast.makeText(AllCoursesActivity.this,
+                                                R.string.somethingWentWrongOnInsert, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                         courseCudAsyncTask.execute(cs);
                     }
                 }
@@ -116,26 +116,28 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
         });
     }
 
+
+    // load all courses fom local db
     private void getAllCoursesFromDb() {
         GetCoursesAsyncTask getCoursesAsyncTask = new GetCoursesAsyncTask(this,
                 new DbResponse<List<Course>>() {
-            @Override
-            public void onSuccess(List<Course> courses) {
-                if (courses.size() == 0 || courses == null) {
-                    getAllCoursesFromServerToDb();
-                } else {
-                    allCourses = courses;
-                    recyclerViewInit();
-                }
+                    @Override
+                    public void onSuccess(List<Course> courses) {
+                        if (courses.size() == 0 || courses == null) {
+                            getAllCoursesFromServerToDb();
+                        } else {
+                            allCourses = courses;
+                            courseAdapter.notifyDataSetChanged();
+                        }
 
-            }
+                    }
 
-            @Override
-            public void onError(Error error) {
-                Toast.makeText(AllCoursesActivity.this, R.string.cannotGetCoursesFromDb,
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+                    @Override
+                    public void onError(Error error) {
+                        Toast.makeText(AllCoursesActivity.this, R.string.cannotGetCoursesFromDb,
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
         getCoursesAsyncTask.execute();
     }
 
@@ -150,7 +152,7 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
 
 
     @Override
-    public void onCourseClicked(Course course, int position) {
+    public void onCourseClicked(Course course, int position, String status) {
         course = allCourses.get(position);
 
         if (course != null) {

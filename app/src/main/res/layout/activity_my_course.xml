@@ -6,58 +6,6 @@
     android:background="@color/bone_bg"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/my_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/mineShaft"
-        android:elevation="8dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentBottom="true"
-                android:layout_toLeftOf="@+id/menu_iv"
-                android:layout_toRightOf="@+id/back_iv"
-                android:gravity="center"
-                android:text="@string/myCourses"
-                android:textColor="@color/white"
-                android:textSize="25sp" />
-
-            <ImageView
-                android:id="@+id/menu_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginRight="20dp"
-                android:src="@drawable/menu" />
-
-            <ImageView
-                android:id="@+id/back_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-
-                android:layout_alignParentTop="true"
-                android:layout_alignParentBottom="true"
-                android:src="@drawable/back_arrow" />
-
-
-        </RelativeLayout>
-
-    </androidx.appcompat.widget.Toolbar>
-
-    <!--End of Appbar-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/my_courses_recycler_view"

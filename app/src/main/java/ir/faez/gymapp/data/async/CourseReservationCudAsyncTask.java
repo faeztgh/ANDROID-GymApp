@@ -17,7 +17,8 @@ public class CourseReservationCudAsyncTask extends AsyncTask<CourseReservation, 
     private DbResponse<CourseReservation> dbResponse;
     private String action;
 
-    public CourseReservationCudAsyncTask(Context context, String action, DbResponse<CourseReservation> dbResponse) {
+    public CourseReservationCudAsyncTask(Context context, String action,
+                                         DbResponse<CourseReservation> dbResponse) {
         this.context = context;
         this.dbResponse = dbResponse;
         this.action = action;
@@ -52,7 +53,7 @@ public class CourseReservationCudAsyncTask extends AsyncTask<CourseReservation, 
     }
 
     private Long deleteDoInBackground(CourseReservation[] courseReservation) {
-        return (long) courseReservationDao.delete(courseReservation[0].getId());
+        return (long) courseReservationDao.delete(courseReservation[0].getCourseId());
     }
 
     private Long updateDoInBackground(CourseReservation[] courseReservations) {

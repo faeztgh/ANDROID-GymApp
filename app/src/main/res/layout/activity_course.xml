@@ -38,6 +38,7 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin" />
 
+
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
 
@@ -145,7 +146,7 @@
                     android:layout_marginTop="15dp"
                     android:background="@drawable/each_course_poster_curved_bg"
                     android:backgroundTint="@color/Robins_Egg_Blue"
-                    android:text="Reserve Course"
+                    android:text="@string/reserveCourse"
                     android:textColor="@color/bone_bg"
                     android:textSize="20sp"
 
@@ -224,19 +225,51 @@
                 android:textColorHint="@color/gray"
                 android:textSize="15sp" />
 
-            <Button
-                android:id="@+id/submit_review_btn"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="20dp"
-                android:background="@drawable/each_course_poster_curved_bg"
-                android:backgroundTint="@color/Amaranth"
-                android:text="@string/addReview"
-                android:textColor="@color/bone_bg"
-                android:textSize="20sp" />
+                android:layout_height="match_parent">
 
+                <Button
+                    android:id="@+id/submit_review_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/each_course_poster_curved_bg"
+                    android:backgroundTint="@color/Amaranth"
+                    android:padding="10dp"
+                    android:text="@string/addReview"
+                    android:textColor="@color/bone_bg"
+                    android:textSize="20sp"
+                    android:layout_marginRight="5dp"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/reload_reviews_btn"
+                    app:layout_constraintTop_toTopOf="parent"
+
+                    />
+
+                <ImageButton
+                    android:id="@+id/reload_reviews_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/ash_curve_btn"
+                    android:backgroundTint="@color/Amaranth"
+                    android:padding="10dp"
+                    android:src="@drawable/baseline_refresh_black_24dp"
+                    android:textColor="@color/bone_bg"
+                    android:textSize="20sp"
+                    android:tint="@color/white"
+
+
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/course_review_recycler_view"

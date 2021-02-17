@@ -2,6 +2,7 @@ package ir.faez.gymapp.data.db.DAO;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -11,7 +12,7 @@ import ir.faez.gymapp.data.model.Review;
 
 @Dao
 public interface ReviewDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insert(Review review);
 
     @Update
