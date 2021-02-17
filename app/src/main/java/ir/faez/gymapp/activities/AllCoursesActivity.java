@@ -71,9 +71,6 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
         // getting courses from db if exist
         getAllCoursesFromDb();
 
-        // get user specific course reservation from server
-       loadCourseReservationsFromDb();
-
         // implementing SwipeToRefresh
         swipeToRefreshImp();
 
@@ -109,6 +106,7 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
                     }
                 }
                 recyclerViewInit();
+
             } else {
                 loadCourseReservationsFromDb();
             }
@@ -117,7 +115,7 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
         }
     }
 
-    // ***************************** Load CourseReservations ****************************************
+    // ***************************** Load CourseReservations from Server****************************************
 
     private void loadCourseReservationsFromServerToDb() {
         networkHelper.getSpecificCourseReservation(appData.getCurrentUser(),
@@ -156,6 +154,10 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
                 });
     }
 
+
+    // ***************************** Load CourseReservations from DB ****************************************
+
+
     private void loadCourseReservationsFromDb() {
         GetSpecificCourseReservationAsyncTask getSpecificCourseReservationAsyncTask =
                 new GetSpecificCourseReservationAsyncTask(getApplicationContext(),
@@ -163,9 +165,9 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
                         new DbResponse<List<CourseReservation>>() {
                             @Override
                             public void onSuccess(List<CourseReservation> courseReservations) {
-                                if (allCourses == null) {
-                                    getAllCoursesFromServerToDb();
-                                }
+//                                if (allCourses == null) {
+//                                    getAllCoursesFromServerToDb();
+//                                }
 
                                 if (courseReservations != null) {
                                     courseReservationsList = courseReservations;
@@ -187,7 +189,8 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
     }
 
 
-    // load all courses from server to database
+    // ***************************** Load All Courses from Server ****************************************
+
     private void getAllCoursesFromServerToDb() {
         networkHelper.getAllCourses(new ResultListener<Course>() {
             @Override
@@ -227,7 +230,8 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
     }
 
 
-    // load all courses fom local db
+    // ***************************** Load All Courses from DB ****************************************
+
     private void getAllCoursesFromDb() {
 
         GetCoursesAsyncTask getCoursesAsyncTask = new GetCoursesAsyncTask(this,
@@ -238,8 +242,9 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
                             getAllCoursesFromServerToDb();
                         } else {
                             allCourses = courses;
+                            // get user specific course reservation from server
+                            loadCourseReservationsFromDb();
                         }
-
                     }
 
                     @Override
@@ -268,7 +273,7 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
         if (requestCode == REQUEST_CODE) {
             //check for result code to be OK.
             if (resultCode == RESULT_OK) {
-                swipeToRefreshImp();
+                recyclerViewInit();
             }
         }
     }
