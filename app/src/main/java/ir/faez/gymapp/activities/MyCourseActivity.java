@@ -10,10 +10,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -31,18 +30,19 @@ import ir.faez.gymapp.network.NetworkHelper;
 import ir.faez.gymapp.utils.Action;
 import ir.faez.gymapp.utils.CourseAdapter;
 import ir.faez.gymapp.utils.OnCourseClickListener;
-import ir.faez.gymapp.utils.Result;
-import ir.faez.gymapp.utils.ResultListener;
 
 public class MyCourseActivity extends AppCompatActivity implements OnCourseClickListener {
-    private static final String TAG = "MY_COURSE_ACTIVITY";
+    private static final String EXTRA_ACTIVITY_NAME = "EXTRA_ACTIVITY_NAME";
+    private static final String ACTIVITY_NAME = "MY_COURSES";
     private static final String EXTRA_COURSE = "EXTRA_COURSE";
     private static final String EXTRA_STATUS = "EXTRA_STATUS";
+    private static final String TAG = "MY_COURSE_ACTIVITY";
+
     private static final int REQUEST_CODE = 1;
 
     private ActivityMyCourseBinding binding;
     private NetworkHelper networkHelper;
-    private HashMap<Course, String> myCoursesAndStatus;
+    private LinkedHashMap<Course, String> myCoursesAndStatus;
     private LinkedHashSet<Course> myCoursesList;
     private List<Course> allCoursesList;
     private List<CourseReservation> courseReservationsList;
@@ -70,30 +70,29 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
         // init app data
         appData = (AppData) getApplication();
 
-        // load allCourses
-        getAllCoursesFromDb();
-
-        // get user specific course reservation from server
-        loadCourseReservationsFromDb();
+        // load allData
+        loadAllData();
 
         // implementing SwipeToRefresh
         swipeToRefreshImp();
     }
 
+    private void loadAllData() {
+        getAllCoursesFromServerToDb();
+        getAllCoursesFromDb();
+        loadCourseReservationsFromServerToDb();
+        loadCourseReservationsFromDb();
+    }
+
+
     private void swipeToRefreshImp() {
 
         binding.myCoursesSwipeToRefreshLayout.setOnRefreshListener(
-                new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        getAllCoursesFromServerToDb();
-                        loadCourseReservationsFromDb();
-                    }
-                });
+                this::loadAllData);
     }
 
     private void makeMyCoursesList() {
-        myCoursesAndStatus = new HashMap<>();
+        myCoursesAndStatus = new LinkedHashMap<>();
         myCoursesList = new LinkedHashSet<>();
 
         if (allCoursesList != null) {
@@ -122,37 +121,34 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
 
     private void loadCourseReservationsFromServerToDb() {
         networkHelper.getSpecificCourseReservation(appData.getCurrentUser(),
-                new ResultListener<CourseReservation>() {
-                    @Override
-                    public void onResult(Result<CourseReservation> result) {
-                        Log.d(TAG, "Result of getting user course reservation from server" + result);
-                        Error error = (result != null) ? result.getError() : null;
-                        List<CourseReservation> resultCourseReservation = result != null ? result.getItems() : null;
+                result -> {
+                    Log.d(TAG, "Result of getting user course reservation from server" + result);
+                    Error error = (result != null) ? result.getError() : null;
+                    List<CourseReservation> resultCourseReservation = result != null ? result.getItems() : null;
 
-                        if ((result == null) || (error != null)) {
-                            String errMsg = (error != null) ? error.getMessage() : getString(R.string.cannotGetUserCourseReservationFromServer);
-                            Toast.makeText(MyCourseActivity.this, errMsg, Toast.LENGTH_SHORT).show();
-                            return;
-                        }
+                    if ((result == null) || (error != null)) {
+                        String errMsg = (error != null) ? error.getMessage() : getString(R.string.cannotGetUserCourseReservationFromServer);
+                        Toast.makeText(MyCourseActivity.this, errMsg, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                        for (CourseReservation cr : resultCourseReservation) {
+                    for (CourseReservation cr : resultCourseReservation) {
 
-                            CourseReservationCudAsyncTask courseReservationCudAsyncTask =
-                                    new CourseReservationCudAsyncTask(getApplicationContext(), Action.INSERT_ACTION, new DbResponse<CourseReservation>() {
-                                        @Override
-                                        public void onSuccess(CourseReservation courseReservation) {
-                                            binding.myCoursesSwipeToRefreshLayout.setRefreshing(false);
-                                            loadCourseReservationsFromDb();
-                                        }
+                        CourseReservationCudAsyncTask courseReservationCudAsyncTask =
+                                new CourseReservationCudAsyncTask(getApplicationContext(), Action.INSERT_ACTION, new DbResponse<CourseReservation>() {
+                                    @Override
+                                    public void onSuccess(CourseReservation courseReservation) {
+                                        binding.myCoursesSwipeToRefreshLayout.setRefreshing(false);
+                                        loadCourseReservationsFromDb();
+                                    }
 
-                                        @Override
-                                        public void onError(Error error) {
-                                            Toast.makeText(MyCourseActivity.this, R.string.somethingWentWrongOnInsert, Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                            courseReservationCudAsyncTask.execute(cr);
+                                    @Override
+                                    public void onError(Error error) {
+                                        Toast.makeText(MyCourseActivity.this, R.string.somethingWentWrongOnInsert, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                        courseReservationCudAsyncTask.execute(cr);
 
-                        }
                     }
                 });
     }
@@ -191,40 +187,37 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
     //********************************* Loading All Courses **************************************
     private void getAllCoursesFromServerToDb() {
 
-        networkHelper.getAllCourses(new ResultListener<Course>() {
-            @Override
-            public void onResult(Result<Course> result) {
+        networkHelper.getAllCourses(result -> {
 
-                Error error = (result != null) ? result.getError() : null;
-                List<Course> courseList = (result != null) ? result.getItems() : null;
-                if ((result == null) || (error != null) || (result == null)) {
-                    String errMsg = (error != null) ? error.getMessage() : getString(R.string.cannotGetCoursesFromServer);
-                    Toast.makeText(MyCourseActivity.this, errMsg, Toast.LENGTH_SHORT).show();
-                    return;
-                }
+            Error error = (result != null) ? result.getError() : null;
+            List<Course> courseList = (result != null) ? result.getItems() : null;
+            if ((result == null) || (error != null)) {
+                String errMsg = (error != null) ? error.getMessage() : getString(R.string.cannotGetCoursesFromServer);
+                Toast.makeText(MyCourseActivity.this, errMsg, Toast.LENGTH_SHORT).show();
+                return;
+            }
 
 
-                if (courseList != null) {
-                    for (Course cs : courseList) {
+            if (courseList != null) {
+                for (Course cs : courseList) {
 
-                        CourseCudAsyncTask courseCudAsyncTask = new
-                                CourseCudAsyncTask(getApplicationContext(), Action.INSERT_ACTION,
-                                new DbResponse<Course>() {
-                                    @Override
-                                    public void onSuccess(Course course) {
-                                        getAllCoursesFromDb();
-                                        binding.myCoursesSwipeToRefreshLayout.setRefreshing(false);
+                    CourseCudAsyncTask courseCudAsyncTask = new
+                            CourseCudAsyncTask(getApplicationContext(), Action.INSERT_ACTION,
+                            new DbResponse<Course>() {
+                                @Override
+                                public void onSuccess(Course course) {
+                                    getAllCoursesFromDb();
+                                    binding.myCoursesSwipeToRefreshLayout.setRefreshing(false);
 
-                                    }
+                                }
 
-                                    @Override
-                                    public void onError(Error error) {
-                                        Toast.makeText(MyCourseActivity.this,
-                                                R.string.somethingWentWrongOnInsert, Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                        courseCudAsyncTask.execute(cs);
-                    }
+                                @Override
+                                public void onError(Error error) {
+                                    Toast.makeText(MyCourseActivity.this,
+                                            R.string.somethingWentWrongOnInsert, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                    courseCudAsyncTask.execute(cs);
                 }
             }
         });
@@ -235,7 +228,7 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
                 new DbResponse<List<Course>>() {
                     @Override
                     public void onSuccess(List<Course> courses) {
-                        if (courses.size() == 0 || courses == null) {
+                        if (courses.size() == 0) {
                             getAllCoursesFromServerToDb();
                         } else {
                             allCoursesList = courses;
@@ -259,6 +252,7 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
         if (requestCode == REQUEST_CODE) {
             //check for result code to be OK.
             if (resultCode == RESULT_OK) {
+                assert data != null;
                 CourseReservation returnCourseReservation = (CourseReservation) data.getSerializableExtra("DELETED_COURSE");
 
                 try {
@@ -278,6 +272,7 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
 
     // initializing RecyclerView
     private void recyclerViewInit() {
+
         RecyclerView recyclerView = findViewById(R.id.my_courses_recycler_view);
         courseAdapter = new CourseAdapter(this, myCoursesAndStatus, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -286,13 +281,14 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
 
     @Override
     public void onCourseClicked(Course course, int position, String status) {
-        course = (new ArrayList<Course>(myCoursesAndStatus.keySet())).get(position);
-        status = (new ArrayList<String>(myCoursesAndStatus.values())).get(position);
+        course = (new ArrayList<>(myCoursesAndStatus.keySet())).get(position);
+        status = (new ArrayList<>(myCoursesAndStatus.values())).get(position);
 
         if (course != null) {
             Intent intent = new Intent(this, CourseActivity.class);
             intent.putExtra(EXTRA_COURSE, course);
             intent.putExtra(EXTRA_STATUS, status);
+            intent.putExtra(EXTRA_ACTIVITY_NAME, ACTIVITY_NAME);
             startActivityForResult(intent, REQUEST_CODE);
         }
     }

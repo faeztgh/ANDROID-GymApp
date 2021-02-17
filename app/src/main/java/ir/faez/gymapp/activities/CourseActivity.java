@@ -50,6 +50,8 @@ public class CourseActivity extends AppCompatActivity implements View.OnClickLis
     private ReviewAdapter reviewAdapter;
     private String status;
     private CourseReservation courseReservation;
+    private String activityName;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,6 +74,8 @@ public class CourseActivity extends AppCompatActivity implements View.OnClickLis
         course = (Course) getIntent().getSerializableExtra("EXTRA_COURSE");
         //init course status
         status = getIntent().getStringExtra("EXTRA_STATUS");
+        //init activity name that intent come from
+        activityName = getIntent().getStringExtra("EXTRA_ACTIVITY_NAME");
 
         // init app data
         appData = (AppData) getApplication();
@@ -79,7 +83,6 @@ public class CourseActivity extends AppCompatActivity implements View.OnClickLis
         // init networkHelper
         networkHelper = NetworkHelper.getInstance(getApplicationContext());
 
-        settingUiElements();
 
         // invoke Listeners
         invokeOnClickListeners();
@@ -90,6 +93,13 @@ public class CourseActivity extends AppCompatActivity implements View.OnClickLis
         // getting all reviews from db
         getAllReviewsFromDb();
 
+        for (CourseReservation cr : appData.getAllCourseReservations()) {
+            if (cr.getCourseId().equals(course.getId())) {
+                courseReservation = cr;
+            }
+        }
+
+        settingUiElements();
     }
 
 
@@ -163,6 +173,7 @@ public class CourseActivity extends AppCompatActivity implements View.OnClickLis
     // setting UI elements
     private void settingUiElements() {
 
+
         if (status != null) {
             if (status.equals(Status.PENDING)) {
                 binding.reserveOrunReserveBtn.setVisibility(View.GONE);
@@ -172,13 +183,30 @@ public class CourseActivity extends AppCompatActivity implements View.OnClickLis
             }
         }
 
+        if (activityName != null && activityName.equals("ALL_COURSES")) {
+            if (binding.reserveOrunReserveBtn.getText().toString().trim()
+                    .equalsIgnoreCase("Delete Course")) {
+                binding.reserveOrunReserveBtn.setVisibility(View.GONE);
+            }
+        }
+
+        binding.courseConfirmCodeTv.setVisibility(View.GONE);
+        if (courseReservation != null) {
+            if (courseReservation.getReservationCode() != null) {
+                binding.courseConfirmCodeTv.setText(courseReservation.getReservationCode());
+                binding.courseConfirmCodeTv.setVisibility(View.VISIBLE);
+            }
+        }
+
+
         binding.collapsingToolbar.setTitle(course.getCourseTitle());
         Glide.with(this).load(course.getPosterUrl()).into(binding.coursePosterIv);
         binding.courseDescTv.setText("About " + course.getCourseTitle() + " : " + course.getCourseDesc());
         binding.courseTitleTv.setText("Title: " + course.getCourseTitle());
         binding.coursePriceTv.setText("Price: " + course.getPrice() + "$");
+        binding.classDateTimeTv.setText("Date/Time : " + course.getDateTime());
 
-        String randomVariantNumber = Double.toString(Math.round(Math.random() * (100 - 20 + 1) + 20));
+        String randomVariantNumber = Integer.toString((int) Math.round(Math.random() * (100 - 20 + 1) + 20));
         binding.exerciseVariantTv.setText(randomVariantNumber + " Workouts");
 
         String randomHourNumber = Double.toString(Math.round(Math.random() * (150 - 30 + 1) + 20));
@@ -236,7 +264,8 @@ public class CourseActivity extends AppCompatActivity implements View.OnClickLis
                     return;
                 }
                 getAllReviewsFromDb();
-                Toast.makeText(CourseActivity.this, R.string.successfullAddingReview, Toast.LENGTH_SHORT).show();
+                Toast.makeText(CourseActivity.this, R.string.successfullAddingReview,
+                        Toast.LENGTH_SHORT).show();
                 binding.addReviewEt.setText("");
             }
         });
@@ -245,11 +274,6 @@ public class CourseActivity extends AppCompatActivity implements View.OnClickLis
 
     private void reserveOrDeleteCourseBtnHandler() {
 
-        for (CourseReservation cr : appData.getAllCourseReservations()) {
-            if (cr.getCourseId().equals(course.getId())) {
-                courseReservation = cr;
-            }
-        }
 
         if (courseReservation != null) {
             if (binding.reserveOrunReserveBtn.getText().toString().trim().

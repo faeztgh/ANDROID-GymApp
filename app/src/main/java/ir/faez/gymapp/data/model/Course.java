@@ -32,24 +32,36 @@ public class Course implements Serializable {
     @ColumnInfo
     @SerializedName("video")
     private String videoUrl;
+    @ColumnInfo
+    private String dateTime;
 
-    public Course(@NonNull String id, String courseTitle, String courseDesc, double price, String posterUrl, String videoUrl) {
+    public Course(@NonNull String id, String courseTitle, String courseDesc, double price, String posterUrl, String videoUrl, String dateTime) {
         this.id = id;
         this.courseTitle = courseTitle;
         this.courseDesc = courseDesc;
         this.price = price;
         this.posterUrl = posterUrl;
         this.videoUrl = videoUrl;
+        this.dateTime = dateTime;
     }
 
-
     @Ignore
-    public Course(String courseTitle, String courseDesc, double price, String posterUrl, String videoUrl) {
+    public Course(String courseTitle, String courseDesc, double price, String posterUrl, String videoUrl, String dateTime) {
         this.courseTitle = courseTitle;
         this.courseDesc = courseDesc;
         this.price = price;
         this.posterUrl = posterUrl;
         this.videoUrl = videoUrl;
+        this.dateTime = dateTime;
+    }
+
+
+    public String getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
     }
 
     @NonNull

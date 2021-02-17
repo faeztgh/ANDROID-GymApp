@@ -1,5 +1,6 @@
 package ir.faez.gymapp.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -107,41 +108,54 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         }
 
 
+        @SuppressLint({"UseCompatLoadingForColorStateLists", "SetTextI18n"})
         public void setItemData(int position) throws IOException {
             this.position = position;
 
-            course = (new ArrayList<Course>(myCourseListAndStatus.keySet())).get(position);
-            status = (new ArrayList<String>(myCourseListAndStatus.values())).get(position);
-
-            if (myCourseListAndStatus != null && context.getClass() == MyCourseActivity.class) {
-                if (status.equals(Status.PENDING)) {
-                    itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.Corn));
-                }
-                if (status.equals(Status.RESERVED)) {
-                    itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.Robins_Egg_Blue));
-                    statusRibbon.setBackgroundTintList(context.getResources().getColorStateList(R.color.Chartreuse));
-                    statusRibbon.setText("Reserved");
-                }
+            if (myCourseListAndStatus != null && myCourseListAndStatus.size() != 0) {
+                course = (new ArrayList<>(myCourseListAndStatus.keySet())).get(position);
+                status = (new ArrayList<>(myCourseListAndStatus.values())).get(position);
+            } else {
+                course = courses.get(position);
+                status = " ";
             }
 
-
-            if (myCourseListAndStatus != null && context.getClass() == AllCoursesActivity.class) {
-                if (status.equals(Status.PENDING)) {
-                    itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.skyBlue));
-                } else if (status.equals(Status.RESERVED)) {
-                    itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.skyBlue));
-                    statusRibbon.setBackgroundTintList(context.getResources().getColorStateList(R.color.Chartreuse));
-                    statusRibbon.setText("Reserved");
+            try {
+                if (myCourseListAndStatus != null
+                        && myCourseListAndStatus.size() != 0
+                        && context.getClass() == MyCourseActivity.class) {
+                    if (status.equals(Status.PENDING)) {
+                        itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.Corn));
+                    }
+                    if (status.equals(Status.RESERVED)) {
+                        itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.Robins_Egg_Blue));
+                        statusRibbon.setBackgroundTintList(context.getResources().getColorStateList(R.color.Chartreuse));
+                        statusRibbon.setText("Reserved");
+                    }
+                } else if (myCourseListAndStatus != null
+                        && myCourseListAndStatus.size() != 0
+                        && context.getClass() == AllCoursesActivity.class) {
+                    if (status.equals(Status.PENDING)) {
+                        itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.skyBlue));
+                    } else if (status.equals(Status.RESERVED)) {
+                        itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.skyBlue));
+                        statusRibbon.setBackgroundTintList(context.getResources().getColorStateList(R.color.Chartreuse));
+                        statusRibbon.setText("Reserved");
+                    } else {
+                        itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.cerulean));
+                        statusRibbon.setVisibility(View.GONE);
+                    }
                 } else {
                     itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.cerulean));
                     statusRibbon.setVisibility(View.GONE);
                 }
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-
 
             // setting item stringify data
             exerciseTitle.setText(course.getCourseTitle());
-            String randomVariantNumber = Double.toString(Math.round(Math.random() * (100 - 20 + 1) + 20));
+            String randomVariantNumber = Integer.toString((int) Math.round(Math.random() * (100 - 20 + 1) + 20));
             exerciseType.setText(randomVariantNumber + " Workouts");
             String randomHourNumber = Double.toString(Math.round(Math.random() * (150 - 30 + 1) + 20));
             exerciseTime.setText(randomHourNumber + " Hour");
@@ -152,10 +166,8 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
 
         @Override
         public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.item_layout_constraint:
-                    onCourseClickListener.onCourseClicked(course, position, status);
-                    break;
+            if (v.getId() == R.id.item_layout_constraint) {
+                onCourseClickListener.onCourseClicked(course, position, status);
             }
         }
     }

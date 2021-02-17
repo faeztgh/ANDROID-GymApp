@@ -139,6 +139,34 @@
 
                     />
 
+                <TextView
+                    android:id="@+id/class_dateTime_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:drawableLeft="@drawable/baseline_calendar_today_black_24dp"
+                    android:drawablePadding="5dp"
+                    android:textColor="@color/black"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/exercise_variant_tv"
+                    tools:text="12/07/2021 - 20:30 - even days"
+
+                    />
+
+                <TextView
+                    android:id="@+id/course_confirmCode_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:drawableLeft="@drawable/baseline_qr_code_2_black_24dp"
+                    android:drawablePadding="5dp"
+                    android:textColor="@color/black"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/class_dateTime_tv"
+                    tools:text="Q5R42Ss8"
+
+                    />
+
                 <Button
                     android:id="@+id/reserveOrunReserve_btn"
                     android:layout_width="match_parent"
@@ -151,8 +179,6 @@
                     android:textSize="20sp"
 
                     app:layout_constraintTop_toBottomOf="@id/horizontal_middle_guid"
-
-
                     />
 
 
@@ -161,10 +187,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-
-                    app:layout_constraintGuide_percent="0.6"
-
-                    />
+                    app:layout_constraintGuide_percent="0.65" />
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/vertical_middle_guid"
@@ -234,13 +257,13 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:layout_marginRight="5dp"
                     android:background="@drawable/each_course_poster_curved_bg"
                     android:backgroundTint="@color/Amaranth"
                     android:padding="10dp"
                     android:text="@string/addReview"
                     android:textColor="@color/bone_bg"
                     android:textSize="20sp"
-                    android:layout_marginRight="5dp"
 
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
