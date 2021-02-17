@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import ir.faez.gymapp.R;
+import ir.faez.gymapp.activities.AllCoursesActivity;
+import ir.faez.gymapp.activities.MyCourseActivity;
 import ir.faez.gymapp.data.model.Course;
 
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder> {
@@ -26,7 +28,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
     // Instance fields
     private Context context;
     private List<Course> courses;
-    private HashMap<Course, String> courseListAndStatus;
+    private HashMap<Course, String> myCourseListAndStatus;
     private LayoutInflater layoutInflater;
     private OnCourseClickListener onCourseClickListener;
     private String status;
@@ -44,12 +46,12 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
 
     // Constructor
 
-    public CourseAdapter(Context context, HashMap<Course, String> courseListAndStatus,
+    public CourseAdapter(Context context, HashMap<Course, String> myCourseListAndStatus,
                          OnCourseClickListener onCourseClickListener) {
         this.context = context;
         this.onCourseClickListener = onCourseClickListener;
         this.layoutInflater = LayoutInflater.from(context);
-        this.courseListAndStatus = courseListAndStatus;
+        this.myCourseListAndStatus = myCourseListAndStatus;
     }
 
     @NonNull
@@ -73,7 +75,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         if (courses != null) {
             return courses.size();
         }
-        return courseListAndStatus != null ? courseListAndStatus.size() : null;
+        return myCourseListAndStatus != null ? myCourseListAndStatus.size() : null;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -108,9 +110,10 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         public void setItemData(int position) throws IOException {
             this.position = position;
 
-            if (courseListAndStatus != null) {
-                course = (new ArrayList<Course>(courseListAndStatus.keySet())).get(position);
-                status = (new ArrayList<String>(courseListAndStatus.values())).get(position);
+            course = (new ArrayList<Course>(myCourseListAndStatus.keySet())).get(position);
+            status = (new ArrayList<String>(myCourseListAndStatus.values())).get(position);
+
+            if (myCourseListAndStatus != null && context.getClass() == MyCourseActivity.class) {
                 if (status.equals(Status.PENDING)) {
                     itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.Corn));
                 }
@@ -122,19 +125,17 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
             }
 
 
-            if (courses != null) {
-                statusRibbon.setVisibility(View.INVISIBLE);
-                course = courses.get(position);
-//            switch (courses.get(position).getStatus()) {
-//                case "RESERVED":
-//                    itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.Robins_Egg_Blue));
-//                    break;
-//                case "NOT_RESERVED":
-//                    itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.Hollywood_Cerise));
-//                    break;
-//            }
-                itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.cerulean));
-
+            if (myCourseListAndStatus != null && context.getClass() == AllCoursesActivity.class) {
+                if (status.equals(Status.PENDING)) {
+                    itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.skyBlue));
+                } else if (status.equals(Status.RESERVED)) {
+                    itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.skyBlue));
+                    statusRibbon.setBackgroundTintList(context.getResources().getColorStateList(R.color.Chartreuse));
+                    statusRibbon.setText("Reserved");
+                } else {
+                    itemLayout.setBackgroundTintList(context.getResources().getColorStateList(R.color.cerulean));
+                    statusRibbon.setVisibility(View.GONE);
+                }
             }
 
 

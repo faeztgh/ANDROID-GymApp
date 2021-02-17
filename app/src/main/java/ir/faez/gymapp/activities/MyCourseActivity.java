@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,9 +74,23 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
         getAllCoursesFromDb();
 
         // get user specific course reservation from server
-        addCourseReservationsFromServerToDb();
+        loadCourseReservationsFromDb();
+
+        // implementing SwipeToRefresh
+        swipeToRefreshImp();
     }
 
+    private void swipeToRefreshImp() {
+
+        binding.myCoursesSwipeToRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        getAllCoursesFromServerToDb();
+                        loadCourseReservationsFromDb();
+                    }
+                });
+    }
 
     private void makeMyCoursesList() {
         myCoursesAndStatus = new HashMap<>();
@@ -103,18 +118,9 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
     }
 
 
-    // initializing RecyclerView
-    private void recyclerViewInit() {
-        RecyclerView recyclerView = findViewById(R.id.my_courses_recycler_view);
-        courseAdapter = new CourseAdapter(this, myCoursesAndStatus, this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(courseAdapter);
-    }
-
-
     // ***************************** Load CourseReservations ****************************************
 
-    private void addCourseReservationsFromServerToDb() {
+    private void loadCourseReservationsFromServerToDb() {
         networkHelper.getSpecificCourseReservation(appData.getCurrentUser(),
                 new ResultListener<CourseReservation>() {
                     @Override
@@ -135,6 +141,7 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
                                     new CourseReservationCudAsyncTask(getApplicationContext(), Action.INSERT_ACTION, new DbResponse<CourseReservation>() {
                                         @Override
                                         public void onSuccess(CourseReservation courseReservation) {
+                                            binding.myCoursesSwipeToRefreshLayout.setRefreshing(false);
                                             loadCourseReservationsFromDb();
                                         }
 
@@ -165,6 +172,8 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
                                     courseReservationsList = courseReservations;
                                     appData.setAllCourseReservations(courseReservationsList);
                                     makeMyCoursesList();
+                                } else {
+                                    loadCourseReservationsFromServerToDb();
                                 }
                             }
 
@@ -204,6 +213,8 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
                                     @Override
                                     public void onSuccess(Course course) {
                                         getAllCoursesFromDb();
+                                        binding.myCoursesSwipeToRefreshLayout.setRefreshing(false);
+
                                     }
 
                                     @Override
@@ -240,21 +251,6 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
         getCoursesAsyncTask.execute();
     }
 
-
-    @Override
-    public void onCourseClicked(Course course, int position, String status) {
-        course = (new ArrayList<Course>(myCoursesAndStatus.keySet())).get(position);
-        status = (new ArrayList<String>(myCoursesAndStatus.values())).get(position);
-
-        if (course != null) {
-            Intent intent = new Intent(this, CourseActivity.class);
-            intent.putExtra(EXTRA_COURSE, course);
-            intent.putExtra(EXTRA_STATUS, status);
-            startActivityForResult(intent, REQUEST_CODE);
-        }
-    }
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -279,4 +275,26 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
             }
         }
     }
+
+    // initializing RecyclerView
+    private void recyclerViewInit() {
+        RecyclerView recyclerView = findViewById(R.id.my_courses_recycler_view);
+        courseAdapter = new CourseAdapter(this, myCoursesAndStatus, this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(courseAdapter);
+    }
+
+    @Override
+    public void onCourseClicked(Course course, int position, String status) {
+        course = (new ArrayList<Course>(myCoursesAndStatus.keySet())).get(position);
+        status = (new ArrayList<String>(myCoursesAndStatus.values())).get(position);
+
+        if (course != null) {
+            Intent intent = new Intent(this, CourseActivity.class);
+            intent.putExtra(EXTRA_COURSE, course);
+            intent.putExtra(EXTRA_STATUS, status);
+            startActivityForResult(intent, REQUEST_CODE);
+        }
+    }
+
 }

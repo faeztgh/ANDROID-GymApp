@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -40,6 +39,7 @@ import ir.faez.gymapp.utils.Status;
 
 public class CourseActivity extends AppCompatActivity implements View.OnClickListener {
     public static final String DELETE_EXTRA_MESSAGE = "DELETED_COURSE";
+    public static final String RESERVE_EXTRA_MESSAGE = "RESERVE_EXTRA_MESSAGE";
     private static final String TAG = "COURSE_RESERVATION";
     private ActivityCourseBinding binding;
     private Course course;
@@ -330,7 +330,11 @@ public class CourseActivity extends AppCompatActivity implements View.OnClickLis
                                     if (courseReservation == null) {
                                         return;
                                     }
+
                                     Toast.makeText(CourseActivity.this, R.string.courseReservationAddedSuccessfully, Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent();
+                                    intent.putExtra(RESERVE_EXTRA_MESSAGE, courseReservation);
+                                    setResult(RESULT_OK, intent);
                                     finish();
                                 }
 
