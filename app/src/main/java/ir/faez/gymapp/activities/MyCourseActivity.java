@@ -168,7 +168,7 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
                                     getAllCoursesFromServerToDb();
                                 }
 
-                                if (courseReservations != null) {
+                                if (courseReservations != null && courseReservations.size() != 0) {
                                     courseReservationsList = courseReservations;
                                     appData.setAllCourseReservations(courseReservationsList);
                                     makeMyCoursesList();

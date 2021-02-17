@@ -165,13 +165,12 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
                         new DbResponse<List<CourseReservation>>() {
                             @Override
                             public void onSuccess(List<CourseReservation> courseReservations) {
-//                                if (allCourses == null) {
-//                                    getAllCoursesFromServerToDb();
-//                                }
+                                if (allCourses == null) {
+                                    getAllCoursesFromServerToDb();
+                                }
 
-                                if (courseReservations != null) {
+                                if (courseReservations != null && courseReservations.size() != 0) {
                                     courseReservationsList = courseReservations;
-                                    appData.setAllCourseReservations(courseReservationsList);
                                     makeMyCoursesList();
                                 } else {
                                     loadCourseReservationsFromServerToDb();
@@ -185,7 +184,9 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
                                         Toast.LENGTH_SHORT).show();
                             }
                         });
-        getSpecificCourseReservationAsyncTask.execute(appData.getCurrentUser().getId());
+        if (appData.getCurrentUser() != null) {
+            getSpecificCourseReservationAsyncTask.execute(appData.getCurrentUser().getId());
+        }
     }
 
 
@@ -273,7 +274,7 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
         if (requestCode == REQUEST_CODE) {
             //check for result code to be OK.
             if (resultCode == RESULT_OK) {
-                recyclerViewInit();
+                courseAdapter.notifyDataSetChanged();
             }
         }
     }
