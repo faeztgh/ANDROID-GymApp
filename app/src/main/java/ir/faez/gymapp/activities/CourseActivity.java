@@ -1,5 +1,6 @@
 package ir.faez.gymapp.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,8 +33,6 @@ import ir.faez.gymapp.data.model.Review;
 import ir.faez.gymapp.databinding.ActivityCourseBinding;
 import ir.faez.gymapp.network.NetworkHelper;
 import ir.faez.gymapp.utils.Action;
-import ir.faez.gymapp.utils.Result;
-import ir.faez.gymapp.utils.ResultListener;
 import ir.faez.gymapp.utils.ReviewAdapter;
 import ir.faez.gymapp.utils.Status;
 
@@ -110,37 +109,34 @@ public class CourseActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void getAllReviewsFromServerToDb() {
-        networkHelper.getAllReviews(new ResultListener<Review>() {
-            @Override
-            public void onResult(Result<Review> result) {
-                Error error = (result != null) ? result.getError() : null;
-                List<Review> reviews = (result != null) ? result.getItems() : null;
-                if ((result == null) || (error != null) || (result == null)) {
-                    String errMsg = (error != null) ? error.getMessage() : getString(R.string.cannotGetReviewsFromServer);
-                    Toast.makeText(CourseActivity.this, errMsg, Toast.LENGTH_SHORT).show();
-                    return;
-                }
+        networkHelper.getAllReviews(result -> {
+            Error error = (result != null) ? result.getError() : null;
+            List<Review> reviews = (result != null) ? result.getItems() : null;
+            if ((result == null) || (error != null)) {
+                String errMsg = (error != null) ? error.getMessage() : getString(R.string.cannotGetReviewsFromServer);
+                Toast.makeText(CourseActivity.this, errMsg, Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                if (reviews != null) {
-                    for (Review rv : reviews) {
-                        ReviewCudAsyncTask reviewCudAsyncTask = new ReviewCudAsyncTask(getApplicationContext(),
-                                Action.INSERT_ACTION, new DbResponse<Review>() {
-                            @Override
-                            public void onSuccess(Review review) {
-                                getAllReviewsFromDb();
-                            }
+            if (reviews != null) {
+                for (Review rv : reviews) {
+                    ReviewCudAsyncTask reviewCudAsyncTask = new ReviewCudAsyncTask(getApplicationContext(),
+                            Action.INSERT_ACTION, new DbResponse<Review>() {
+                        @Override
+                        public void onSuccess(Review review) {
+                            getAllReviewsFromDb();
+                        }
 
-                            @Override
-                            public void onError(Error error) {
-                                Toast.makeText(CourseActivity.this,
-                                        R.string.somethingWentWrongOnInsert, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        reviewCudAsyncTask.execute(rv);
-                    }
-                } else {
-                    Toast.makeText(appData, R.string.noReviewFound, Toast.LENGTH_SHORT).show();
+                        @Override
+                        public void onError(Error error) {
+                            Toast.makeText(CourseActivity.this,
+                                    R.string.somethingWentWrongOnInsert, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    reviewCudAsyncTask.execute(rv);
                 }
+            } else {
+                Toast.makeText(appData, R.string.noReviewFound, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -171,6 +167,7 @@ public class CourseActivity extends AppCompatActivity implements View.OnClickLis
 
 
     // setting UI elements
+    @SuppressLint({"SetTextI18n", "UseCompatLoadingForColorStateLists"})
     private void settingUiElements() {
 
 
@@ -179,7 +176,8 @@ public class CourseActivity extends AppCompatActivity implements View.OnClickLis
                 binding.reserveOrunReserveBtn.setVisibility(View.GONE);
             } else if (status.equals(Status.RESERVED)) {
                 binding.reserveOrunReserveBtn.setText("Delete Course");
-                binding.reserveOrunReserveBtn.setBackgroundTintList(getApplicationContext().getResources().getColorStateList(R.color.Hollywood_Cerise));
+                binding.reserveOrunReserveBtn.setBackgroundTintList(getApplicationContext()
+                        .getResources().getColorStateList(R.color.Hollywood_Cerise));
             }
         }
 
@@ -252,22 +250,18 @@ public class CourseActivity extends AppCompatActivity implements View.OnClickLis
         Review review = new Review(dateTime.toString(), binding.addReviewEt.getText().toString().trim(),
                 course.getId(), appData.getCurrentUser().getId(), appData.getCurrentUser().getFullName());
 
-        networkHelper.insertReview(review, appData.getCurrentUser(), new ResultListener<Review>() {
-            @Override
-            public void onResult(Result<Review> result) {
-                Log.d(TAG, "Result of add review in server" + result);
-                Error error = (result != null) ? result.getError() : null;
-                Review reviewResult = result != null ? result.getItem() : null;
-                if ((result == null) || (error != null)) {
-                    String errMsg = (error != null) ? error.getMessage() : getString(R.string.somethingWentWrongOnInsert);
-                    Toast.makeText(CourseActivity.this, errMsg, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                getAllReviewsFromDb();
-                Toast.makeText(CourseActivity.this, R.string.successfullAddingReview,
-                        Toast.LENGTH_SHORT).show();
-                binding.addReviewEt.setText("");
+        networkHelper.insertReview(review, appData.getCurrentUser(), result -> {
+            Log.d(TAG, "Result of add review in server" + result);
+            Error error = (result != null) ? result.getError() : null;
+            if ((result == null) || (error != null)) {
+                String errMsg = (error != null) ? error.getMessage() : getString(R.string.somethingWentWrongOnInsert);
+                Toast.makeText(CourseActivity.this, errMsg, Toast.LENGTH_SHORT).show();
+                return;
             }
+            getAllReviewsFromDb();
+            Toast.makeText(CourseActivity.this, R.string.successfullAddingReview,
+                    Toast.LENGTH_SHORT).show();
+            binding.addReviewEt.setText("");
         });
     }
 
@@ -280,44 +274,41 @@ public class CourseActivity extends AppCompatActivity implements View.OnClickLis
                     equalsIgnoreCase("Delete Course")) {
 
                 networkHelper.deleteCourseReservation(courseReservation, appData.getCurrentUser(),
-                        new ResultListener<CourseReservation>() {
-                            @Override
-                            public void onResult(Result<CourseReservation> result) {
-                                Log.d(TAG, "Result of deleting CourseReservation in server:  " + result);
-                                Error error = result != null ? result.getError() : null;
-                                CourseReservation courseReservationResult = result != null ? result.getItem() : null;
+                        result -> {
+                            Log.d(TAG, "Result of deleting CourseReservation in server:  " + result);
+                            Error error = result != null ? result.getError() : null;
+                            CourseReservation courseReservationResult = result != null ? result.getItem() : null;
 
-                                if (result == null || courseReservationResult == null || error != null) {
-                                    String errorMsg = error != null ? error.getMessage() : getString(R.string.somethingWentWrongOnDelete);
-                                    Toast.makeText(CourseActivity.this, errorMsg,
-                                            Toast.LENGTH_SHORT).show();
-                                    return;
-                                }
+                            if (result == null || courseReservationResult == null || error != null) {
+                                String errorMsg = error != null ? error.getMessage() : getString(R.string.somethingWentWrongOnDelete);
+                                Toast.makeText(CourseActivity.this, errorMsg,
+                                        Toast.LENGTH_SHORT).show();
+                                return;
+                            }
 
 
-                                // Removing from DB
-                                CourseReservationCudAsyncTask courseReservationCudAsyncTask =
-                                        new CourseReservationCudAsyncTask(CourseActivity.this,
-                                                Action.DELETE_ACTION, new DbResponse<CourseReservation>() {
-                                            @Override
-                                            public void onSuccess(CourseReservation courseReservation) {
-                                                Toast.makeText(CourseActivity.this, R.string.courseRemovedSuccessfully, Toast.LENGTH_SHORT).show();
-                                                Intent intent = new Intent();
-                                                intent.putExtra(DELETE_EXTRA_MESSAGE, courseReservation);
-                                                setResult(RESULT_OK, intent);
-                                                finish();
+                            // Removing from DB
+                            CourseReservationCudAsyncTask courseReservationCudAsyncTask =
+                                    new CourseReservationCudAsyncTask(CourseActivity.this,
+                                            Action.DELETE_ACTION, new DbResponse<CourseReservation>() {
+                                        @Override
+                                        public void onSuccess(CourseReservation courseReservation) {
+                                            Toast.makeText(CourseActivity.this, R.string.courseRemovedSuccessfully, Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent();
+                                            intent.putExtra(DELETE_EXTRA_MESSAGE, courseReservation);
+                                            setResult(RESULT_OK, intent);
+                                            finish();
 
-                                            }
+                                        }
 
-                                            @Override
-                                            public void onError(Error error) {
-                                                Toast.makeText(CourseActivity.this, error.getMessage(),
-                                                        Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                                if (courseReservation != null) {
-                                    courseReservationCudAsyncTask.execute(courseReservation);
-                                }
+                                        @Override
+                                        public void onError(Error error) {
+                                            Toast.makeText(CourseActivity.this, error.getMessage(),
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                            if (courseReservation != null) {
+                                courseReservationCudAsyncTask.execute(courseReservation);
                             }
                         });
             }
@@ -332,43 +323,40 @@ public class CourseActivity extends AppCompatActivity implements View.OnClickLis
 
 
             networkHelper.insertCourseReservation(courseReservation, appData.getCurrentUser(),
-                    new ResultListener<CourseReservation>() {
-                        @Override
-                        public void onResult(Result<CourseReservation> result) {
-                            Log.d(TAG, "Result of add course reservation in server" + result);
-                            Error error = (result != null) ? result.getError() : null;
-                            CourseReservation crResult = result != null ? result.getItem() : null;
-                            if ((result == null) || (error != null)) {
-                                String errMsg = (error != null) ? error.getMessage() : getString(R.string.somethingWentWrongOnInsert);
-                                Toast.makeText(CourseActivity.this, errMsg, Toast.LENGTH_SHORT).show();
-                                return;
+                    result -> {
+                        Log.d(TAG, "Result of add course reservation in server" + result);
+                        Error error = (result != null) ? result.getError() : null;
+                        CourseReservation crResult = result != null ? result.getItem() : null;
+                        if ((result == null) || (error != null)) {
+                            String errMsg = (error != null) ? error.getMessage() : getString(R.string.somethingWentWrongOnInsert);
+                            Toast.makeText(CourseActivity.this, errMsg, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        courseReservation.setId(crResult.getId());
+                        courseReservation.setReservationCode(crResult.getReservationCode());
+                        courseReservation.setStatus(crResult.getStatus());
+
+                        CourseReservationCudAsyncTask courseReservationCudAsyncTask = new CourseReservationCudAsyncTask(getApplicationContext(), Action.INSERT_ACTION, new DbResponse<CourseReservation>() {
+                            @Override
+                            public void onSuccess(CourseReservation courseReservation1) {
+                                if (courseReservation1 == null) {
+                                    return;
+                                }
+
+                                Toast.makeText(CourseActivity.this, R.string.courseReservationAddedSuccessfully, Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent();
+                                intent.putExtra(RESERVE_EXTRA_MESSAGE, courseReservation1);
+                                setResult(RESULT_OK, intent);
+                                finish();
                             }
 
-                            courseReservation.setId(crResult.getId());
-                            courseReservation.setReservationCode(crResult.getReservationCode());
-                            courseReservation.setStatus(crResult.getStatus());
-
-                            CourseReservationCudAsyncTask courseReservationCudAsyncTask = new CourseReservationCudAsyncTask(getApplicationContext(), Action.INSERT_ACTION, new DbResponse<CourseReservation>() {
-                                @Override
-                                public void onSuccess(CourseReservation courseReservation) {
-                                    if (courseReservation == null) {
-                                        return;
-                                    }
-
-                                    Toast.makeText(CourseActivity.this, R.string.courseReservationAddedSuccessfully, Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent();
-                                    intent.putExtra(RESERVE_EXTRA_MESSAGE, courseReservation);
-                                    setResult(RESULT_OK, intent);
-                                    finish();
-                                }
-
-                                @Override
-                                public void onError(Error error) {
-                                    Toast.makeText(CourseActivity.this, R.string.sthWentWrongOnAddingCourseReservation, Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                            courseReservationCudAsyncTask.execute(courseReservation);
-                        }
+                            @Override
+                            public void onError(Error error) {
+                                Toast.makeText(CourseActivity.this, R.string.sthWentWrongOnAddingCourseReservation, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        courseReservationCudAsyncTask.execute(courseReservation);
                     });
         }
     }

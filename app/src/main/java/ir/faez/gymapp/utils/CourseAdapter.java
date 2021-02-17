@@ -76,7 +76,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         if (courses != null) {
             return courses.size();
         }
-        return myCourseListAndStatus != null ? myCourseListAndStatus.size() : null;
+        return myCourseListAndStatus != null ? myCourseListAndStatus.size() : 0;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
