@@ -547,7 +547,7 @@ public class NetworkHelper {
     //*************************************** Get Specific CourseReservation ***********************
 
 
-    public void getSpecificCourseReservation(final User user, final ResultListener<CourseReservation> listener) {
+    public void getSpecificCourseReservationByOwnerId(final User user, final ResultListener<CourseReservation> listener) {
         if (!isNetworkConnected()) {
             Error error = new Error(context.getString(R.string.networkGeneralError));
             listener.onResult(new Result<CourseReservation>(null, null, error));

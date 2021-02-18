@@ -120,7 +120,7 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
     // ***************************** Load CourseReservations ****************************************
 
     private void loadCourseReservationsFromServerToDb() {
-        networkHelper.getSpecificCourseReservation(appData.getCurrentUser(),
+        networkHelper.getSpecificCourseReservationByOwnerId(appData.getCurrentUser(),
                 result -> {
                     Log.d(TAG, "Result of getting user course reservation from server" + result);
                     Error error = (result != null) ? result.getError() : null;

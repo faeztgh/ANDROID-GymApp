@@ -57,7 +57,7 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
 
     private void init() {
         // initializing network helper
-        networkHelper = NetworkHelper.getInstance(getApplicationContext());
+        networkHelper = NetworkHelper.getInstance(this);
 
         // initializing binding
         binding = ActivityAllCoursesBinding.inflate(getLayoutInflater());
@@ -115,7 +115,7 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
     // ***************************** Load CourseReservations from Server****************************************
 
     private void loadCourseReservationsFromServerToDb() {
-        networkHelper.getSpecificCourseReservation(appData.getCurrentUser(),
+        networkHelper.getSpecificCourseReservationByOwnerId(appData.getCurrentUser(),
                 result -> {
                     Log.d(TAG, "Result of getting user course reservation from server" + result);
                     Error error = (result != null) ? result.getError() : null;
