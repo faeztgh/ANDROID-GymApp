@@ -185,14 +185,17 @@ public class CourseActivity extends AppCompatActivity implements View.OnClickLis
             if (binding.reserveOrunReserveBtn.getText().toString().trim()
                     .equalsIgnoreCase("Delete Course")) {
                 binding.reserveOrunReserveBtn.setVisibility(View.GONE);
+                binding.courseConfirmCodeTv.setVisibility(View.GONE);
             }
         }
 
         binding.courseConfirmCodeTv.setVisibility(View.GONE);
-        if (courseReservation != null) {
-            if (courseReservation.getReservationCode() != null) {
-                binding.courseConfirmCodeTv.setText(courseReservation.getReservationCode());
-                binding.courseConfirmCodeTv.setVisibility(View.VISIBLE);
+        if (activityName != null && activityName.equals("MY_COURSES")) {
+            if (courseReservation != null) {
+                if (courseReservation.getReservationCode() != null) {
+                    binding.courseConfirmCodeTv.setText(courseReservation.getReservationCode());
+                    binding.courseConfirmCodeTv.setVisibility(View.VISIBLE);
+                }
             }
         }
 

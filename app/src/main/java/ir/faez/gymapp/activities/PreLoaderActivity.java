@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -115,7 +114,7 @@ public class PreLoaderActivity extends AppCompatActivity {
 
             if (newReservedCourseReservations.size() != 0) {
                 for (CourseReservation cr : newReservedCourseReservations) {
-                    sendOnChannel1(cr);
+                    notifHandler(cr);
                     newReservedCourseReservations.remove(cr);
                     loadAllCourseReservationsFromServer(Status.PENDING);
                 }
@@ -126,11 +125,13 @@ public class PreLoaderActivity extends AppCompatActivity {
     }
 
 
-    public void sendOnChannel1(CourseReservation courseReservation) {
-        String title = "One of your courses are confirmed!";
-        String message = "Reservation Code: " + courseReservation.getReservationCode();
-        PendingIntent pendingIntent =  PendingIntent.getActivity(this,1,
-                new Intent(this,MyCourseActivity.class),PendingIntent.FLAG_UPDATE_CURRENT);
+    public void notifHandler(CourseReservation courseReservation) {
+        String title = this.getResources().getString(R.string.oneOfYourCoursesAreConfirmed);
+        String message = this.getResources().getString(R.string.reservationCode)
+                + " " + courseReservation.getReservationCode();
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1,
+                new Intent(this, MyCourseActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
                 .setSmallIcon(R.drawable.baseline_fitness_center_black_24dp)
@@ -148,6 +149,8 @@ public class PreLoaderActivity extends AppCompatActivity {
         notificationManager.notify(1, notification);
     }
 
+
+
     private void navigateToLoginActivity() {
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
@@ -159,6 +162,8 @@ public class PreLoaderActivity extends AppCompatActivity {
     }
 
 
+
+
     private void getUserByState() {
 
         GetSpecificUserAsyncTask getSpecificUserAsyncTask = new GetSpecificUserAsyncTask(this,
@@ -168,20 +173,19 @@ public class PreLoaderActivity extends AppCompatActivity {
                 if (user != null && user.getIsLoggedIn().equals("true")) {
                     appData.setCurrentUser(user);
 
-                    // init pending course reservations
+                    // init pending course reservations only when app start
                     loadAllCourseReservationsFromServer(Status.PENDING);
 
-                    //init notif
+                    // update allCourses list every 60sec and check for diff's
                     new Timer().scheduleAtFixedRate(new TimerTask() {
                         @Override
                         public void run() {
-                            Log.i("FAEZ_TEST", "A Kiss every 5 seconds");
                             loadAllCourseReservationsFromServer("ALL");
                         }
                     }, 0, 60000);
 
-
                     navigateToDashboardActivity();
+
                 } else {
                     appData.setCurrentUser(null);
                 }

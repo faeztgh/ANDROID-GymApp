@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -95,6 +96,9 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
         myCoursesAndStatus = new LinkedHashMap<>();
         myCoursesList = new LinkedHashSet<>();
 
+        // setting last course on top
+        Collections.reverse(courseReservationsList);
+
         if (allCoursesList != null) {
             if (courseReservationsList != null) {
 
@@ -106,6 +110,7 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
                         }
                     }
                 }
+
 
                 recyclerViewInit();
             } else {
@@ -131,6 +136,7 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
                         Toast.makeText(MyCourseActivity.this, errMsg, Toast.LENGTH_SHORT).show();
                         return;
                     }
+
 
                     for (CourseReservation cr : resultCourseReservation) {
 

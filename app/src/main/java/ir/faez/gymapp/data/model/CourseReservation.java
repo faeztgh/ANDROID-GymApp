@@ -5,10 +5,12 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 public class CourseReservation implements Serializable {
@@ -24,13 +26,19 @@ public class CourseReservation implements Serializable {
     private String courseId;
     @ColumnInfo
     private String ownerId;
+    @ColumnInfo
+    @TypeConverters({ir.faez.gymapp.data.model.TypeConverters.class})
+    @SerializedName("createdAt")
+    private Date reservedDate;
 
-    public CourseReservation(@NonNull String id, String reservationCode, String status, String courseId, String ownerId) {
+
+    public CourseReservation(@NonNull String id, String reservationCode, String status, String courseId, String ownerId, Date reservedDate) {
         this.id = id;
         this.reservationCode = reservationCode;
         this.status = status;
         this.courseId = courseId;
         this.ownerId = ownerId;
+        this.reservedDate = reservedDate;
     }
 
     @Ignore
@@ -48,13 +56,18 @@ public class CourseReservation implements Serializable {
         this.ownerId = ownerId;
     }
 
+    public Date getReservedDate() {
+        return reservedDate;
+    }
+
+    public void setReservedDate(Date reservedDate) {
+        this.reservedDate = reservedDate;
+    }
+
     public String getOwnerId() {
         return ownerId;
     }
 
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
-    }
 
     @NonNull
     public String getId() {
@@ -86,7 +99,4 @@ public class CourseReservation implements Serializable {
         return courseId;
     }
 
-    public void setCourseId(String courseId) {
-        this.courseId = courseId;
-    }
 }
