@@ -13,11 +13,11 @@ import ir.faez.gymapp.data.model.CourseReservation;
 import ir.faez.gymapp.data.model.User;
 
 public class AppData extends Application {
+    private List<CourseReservation> allCourseReservations = null;
     public static final String CHANNEL_1_ID = "channel1";
     private static final String TAG = "AppData";
-    private User currentUser = null;
     private List<Course> allCourses = null;
-    private List<CourseReservation> allCourseReservations = null;
+    private User currentUser = null;
 
     @Override
     public void onCreate() {
@@ -37,7 +37,6 @@ public class AppData extends Application {
 
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(channel1);
-
         }
     }
 
@@ -56,10 +55,6 @@ public class AppData extends Application {
 
     public void setAllCourseReservations(List<CourseReservation> allCourseReservations) {
         this.allCourseReservations = allCourseReservations;
-    }
-
-    public List<Course> getAllCourses() {
-        return allCourses;
     }
 
     public void setAllCourses(List<Course> allCourses) {

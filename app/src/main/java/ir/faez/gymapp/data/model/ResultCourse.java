@@ -9,11 +9,4 @@ public class ResultCourse {
         this.results = results;
     }
 
-    public List<Course> getResults() {
-        return results;
-    }
-
-    public void setResults(List<Course> results) {
-        this.results = results;
-    }
 }

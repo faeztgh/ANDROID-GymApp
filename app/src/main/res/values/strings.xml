@@ -77,6 +77,8 @@
     <string name="errorMessageNotExist">Error Message Not Exist!</string>
     <string name="chooseLocation">Please choose your location</string>
     <string name="passwordLengthError">Password length must be 6 or more</string>
+    <string name="passwordsNotMatch">Passwords not match</string>
+    <string name="passwordConfirmNotMatch">Confirm password not match!</string>
     <string name="cannotGetCoursesFromServer">Cannot get courses from server</string>
     <string name="cannotGetReviewsFromServer">Cannot get reviews from server</string>
     <string name="cannotGetReviewsFromDb">Cannot get reviews from Db</string>
@@ -84,9 +86,14 @@
     <string name="cannotGetUserCourseReservationFromServer">Cannot get user course reservation from Server</string>
     <string name="noReviewFound">No Review</string>
     <string name="reload">Reload</string>
+    <string name="share">Share</string>
+    <string name="wallet">Wallet</string>
+    <string name="journals">Journals</string>
     <string name="pending">Pending</string>
+    <string name="wrongChoice">Wrong Choice</string>
     <string name="reserveCourse">Reserve Course</string>
     <string name="reservationCode">Reservation Code:</string>
+    <string name="wrongEmailFormat">Wrong email format</string>
     <string name="oneOfYourCoursesAreConfirmed">One of your courses are confirmed!</string>
 
     <string name="successfulRegister">You Signed up Successfully!</string>

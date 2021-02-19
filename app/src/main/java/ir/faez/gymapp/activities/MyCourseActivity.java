@@ -2,7 +2,6 @@ package ir.faez.gymapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -34,27 +33,24 @@ import ir.faez.gymapp.utils.OnCourseClickListener;
 
 public class MyCourseActivity extends AppCompatActivity implements OnCourseClickListener {
     private static final String EXTRA_ACTIVITY_NAME = "EXTRA_ACTIVITY_NAME";
-    private static final String ACTIVITY_NAME = "MY_COURSES";
     private static final String EXTRA_COURSE = "EXTRA_COURSE";
     private static final String EXTRA_STATUS = "EXTRA_STATUS";
+    private static final String ACTIVITY_NAME = "MY_COURSES";
     private static final String TAG = "MY_COURSE_ACTIVITY";
-
     private static final int REQUEST_CODE = 1;
 
+    private LinkedHashMap<Course, String> myCoursesAndStatus;
+    private List<CourseReservation> courseReservationsList;
+    private LinkedHashSet<Course> myCoursesList;
     private ActivityMyCourseBinding binding;
     private NetworkHelper networkHelper;
-    private LinkedHashMap<Course, String> myCoursesAndStatus;
-    private LinkedHashSet<Course> myCoursesList;
     private List<Course> allCoursesList;
-    private List<CourseReservation> courseReservationsList;
     private CourseAdapter courseAdapter;
     private AppData appData;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         init();
     }
@@ -87,12 +83,11 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
 
 
     private void swipeToRefreshImp() {
-
-        binding.myCoursesSwipeToRefreshLayout.setOnRefreshListener(
-                this::loadAllData);
+        binding.myCoursesSwipeToRefreshLayout.setOnRefreshListener(this::loadAllData);
     }
 
     private void makeMyCoursesList() {
+        // init instance fields
         myCoursesAndStatus = new LinkedHashMap<>();
         myCoursesList = new LinkedHashSet<>();
 
@@ -110,8 +105,6 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
                         }
                     }
                 }
-
-
                 recyclerViewInit();
             } else {
                 loadCourseReservationsFromDb();
@@ -125,9 +118,9 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
     // ***************************** Load CourseReservations ****************************************
 
     private void loadCourseReservationsFromServerToDb() {
+        // load courseReservations from server
         networkHelper.getSpecificCourseReservationByOwnerId(appData.getCurrentUser(),
                 result -> {
-                    Log.d(TAG, "Result of getting user course reservation from server" + result);
                     Error error = (result != null) ? result.getError() : null;
                     List<CourseReservation> resultCourseReservation = result != null ? result.getItems() : null;
 
@@ -137,9 +130,8 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
                         return;
                     }
 
-
+                    // insert course reservations to DB
                     for (CourseReservation cr : resultCourseReservation) {
-
                         CourseReservationCudAsyncTask courseReservationCudAsyncTask =
                                 new CourseReservationCudAsyncTask(getApplicationContext(), Action.INSERT_ACTION, new DbResponse<CourseReservation>() {
                                     @Override
@@ -150,7 +142,8 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
 
                                     @Override
                                     public void onError(Error error) {
-                                        Toast.makeText(MyCourseActivity.this, R.string.somethingWentWrongOnInsert, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(MyCourseActivity.this,
+                                                R.string.somethingWentWrongOnInsert, Toast.LENGTH_SHORT).show();
                                     }
                                 });
                         courseReservationCudAsyncTask.execute(cr);
@@ -192,9 +185,7 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
 
     //********************************* Loading All Courses **************************************
     private void getAllCoursesFromServerToDb() {
-
         networkHelper.getAllCourses(result -> {
-
             Error error = (result != null) ? result.getError() : null;
             List<Course> courseList = (result != null) ? result.getItems() : null;
             if ((result == null) || (error != null)) {
@@ -203,10 +194,9 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
                 return;
             }
 
-
             if (courseList != null) {
+                // insert all courses to DB
                 for (Course cs : courseList) {
-
                     CourseCudAsyncTask courseCudAsyncTask = new
                             CourseCudAsyncTask(getApplicationContext(), Action.INSERT_ACTION,
                             new DbResponse<Course>() {
@@ -243,8 +233,8 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
 
                     @Override
                     public void onError(Error error) {
-                        Toast.makeText(MyCourseActivity.this, R.string.cannotGetCoursesFromDb,
-                                Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MyCourseActivity.this,
+                                R.string.cannotGetCoursesFromDb, Toast.LENGTH_SHORT).show();
                     }
                 });
         getCoursesAsyncTask.execute();
@@ -259,7 +249,8 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
             //check for result code to be OK.
             if (resultCode == RESULT_OK) {
                 assert data != null;
-                CourseReservation returnCourseReservation = (CourseReservation) data.getSerializableExtra("DELETED_COURSE");
+                CourseReservation returnCourseReservation =
+                        (CourseReservation) data.getSerializableExtra("DELETED_COURSE");
 
                 try {
                     // delete the course from list
@@ -278,7 +269,6 @@ public class MyCourseActivity extends AppCompatActivity implements OnCourseClick
 
     // initializing RecyclerView
     private void recyclerViewInit() {
-
         RecyclerView recyclerView = findViewById(R.id.my_courses_recycler_view);
         courseAdapter = new CourseAdapter(this, myCoursesAndStatus, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

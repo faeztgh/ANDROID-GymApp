@@ -1,7 +1,6 @@
 package ir.faez.gymapp.activities;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -12,8 +11,6 @@ import ir.faez.gymapp.R;
 import ir.faez.gymapp.data.model.User;
 import ir.faez.gymapp.databinding.ActivitySignupBinding;
 import ir.faez.gymapp.network.NetworkHelper;
-import ir.faez.gymapp.utils.Result;
-import ir.faez.gymapp.utils.ResultListener;
 
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -48,12 +45,10 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.register_btn:
-                signUpBtnHandler();
-                break;
-            default:
-                Toast.makeText(this, "Wrong Choice", Toast.LENGTH_SHORT).show();
+        if (v.getId() == R.id.register_btn) {
+            signUpBtnHandler();
+        } else {
+            Toast.makeText(this, R.string.wrongChoice, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -74,49 +69,41 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
             User user = new User(fullName, email, userName, password);
 
-            networkHelper.signupUser(user, new ResultListener<User>() {
-                @Override
-                public void onResult(Result<User> result) {
-                    Log.d(TAG, "Result of signing user up in server" + result);
-                    Error error = (result != null) ? result.getError() : null;
+            networkHelper.signupUser(user, result -> {
+                Error error = (result != null) ? result.getError() : null;
 
-                    if ((result == null) || (error != null)) {
-                        String errMsg = (error != null) ? error.getMessage() : getString(R.string.cantSignUpError);
-                        Toast.makeText(SignupActivity.this, errMsg, Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    Toast.makeText(SignupActivity.this, R.string.successfulRegister, Toast.LENGTH_SHORT).show();
-                    finish();
+                if ((result == null) || (error != null)) {
+                    String errMsg = (error != null) ? error.getMessage() : getString(R.string.cantSignUpError);
+                    Toast.makeText(SignupActivity.this, errMsg,
+                            Toast.LENGTH_SHORT).show();
+                    return;
                 }
+                Toast.makeText(SignupActivity.this,
+                        R.string.successfulRegister, Toast.LENGTH_SHORT).show();
+                finish();
             });
-
-
-
         }
     }
 
 
     //****************************** Validating inputs *********************************
     private boolean isEmailValid() {
-        //pattern src: https://www.tutorialspoint.com/how-to-check-email-address-validation-in-android-on-edit-text
-
         String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
         if (binding.emailEdt.getText().toString().trim().matches(emailPattern)
                 && !binding.emailEdt.getText().toString().trim().isEmpty()) {
             return true;
         } else {
-            binding.emailEdt.setError("Wrong email format");
+            binding.emailEdt.setError(this.getResources().getString(R.string.wrongEmailFormat));
             return false;
         }
     }
 
     private boolean isPasswordValid() {
-
         if (binding.passwordEdt.getText().toString().length() >= 6
                 && !binding.passwordEdt.getText().toString().trim().isEmpty()) {
             return true;
         } else {
-            binding.passwordEdt.setError("Password length must be 6 or more");
+            binding.passwordEdt.setError(this.getResources().getString(R.string.passwordLengthError));
             return false;
         }
     }
@@ -128,11 +115,9 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 && !binding.passwordRepEdt.getText().toString().trim().isEmpty()) {
             return true;
         } else {
-            binding.passwordRepEdt.setError("Passwords not match");
+            binding.passwordRepEdt.setError(this.getResources().getString(R.string.passwordsNotMatch));
             Toast.makeText(SignupActivity.this,
-                    "Confirm password not match!"
-                    , Toast.LENGTH_SHORT).show();
-
+                    R.string.passwordConfirmNotMatch, Toast.LENGTH_SHORT).show();
             return false;
         }
     }

@@ -24,7 +24,7 @@ import ir.faez.gymapp.data.async.GetSpecificUserAsyncTask;
 import ir.faez.gymapp.data.db.DAO.DbResponse;
 import ir.faez.gymapp.data.model.CourseReservation;
 import ir.faez.gymapp.data.model.User;
-import ir.faez.gymapp.databinding.ActivityIntroBinding;
+import ir.faez.gymapp.databinding.ActivityPreloaderBinding;
 import ir.faez.gymapp.network.NetworkHelper;
 import ir.faez.gymapp.utils.Action;
 import ir.faez.gymapp.utils.Status;
@@ -32,13 +32,13 @@ import ir.faez.gymapp.utils.Status;
 import static ir.faez.gymapp.data.AppData.CHANNEL_1_ID;
 
 public class PreLoaderActivity extends AppCompatActivity {
-    private ActivityIntroBinding binding;
-    private AppData appData;
-    private NotificationManagerCompat notificationManager;
-    private NetworkHelper networkHelper;
-    private List<CourseReservation> allCourseReservations;
-    private List<CourseReservation> pendingCourseReservations;
     private List<CourseReservation> newReservedCourseReservations;
+    private List<CourseReservation> pendingCourseReservations;
+    private List<CourseReservation> allCourseReservations;
+    private NotificationManagerCompat notificationManager;
+    private ActivityPreloaderBinding binding;
+    private NetworkHelper networkHelper;
+    private AppData appData;
 
 
     @Override
@@ -56,10 +56,11 @@ public class PreLoaderActivity extends AppCompatActivity {
         networkHelper = NetworkHelper.getInstance(this);
 
         // initializing binding
-        binding = ActivityIntroBinding.inflate(getLayoutInflater());
+        binding = ActivityPreloaderBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
+        // hide action bar for this activity
         getSupportActionBar().hide();
 
         // check if user loggedin
@@ -70,12 +71,15 @@ public class PreLoaderActivity extends AppCompatActivity {
 
         // init newReservedCourseReservations
         newReservedCourseReservations = new ArrayList<>();
-
-
     }
 
+    /**
+     * each time all courses load from server,
+     * compare to old list and make decision
+     * to send notification or not depend on
+     * the changes that happened.
+     */
     private void compareLists() {
-
         for (CourseReservation pCr : pendingCourseReservations) {
             for (CourseReservation aCr : allCourseReservations) {
                 if (pCr.getCourseId().equals(aCr.getCourseId())
@@ -87,10 +91,12 @@ public class PreLoaderActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * @param state PENDING or ALL
+     */
     private void loadAllCourseReservationsFromServer(String state) {
         networkHelper.getSpecificCourseReservationByOwnerId(appData.getCurrentUser(), result -> {
             if (state.equals(Status.PENDING)) {
-
                 pendingCourseReservations = result != null ? result.getItems() : null;
 
                 // removing old reserved one from list
@@ -104,12 +110,9 @@ public class PreLoaderActivity extends AppCompatActivity {
                     }
                     pendingCourseReservations.removeAll(removed);
                 }
-
             }
 
             allCourseReservations = result != null ? result.getItems() : null;
-
-
             compareLists();
 
             if (newReservedCourseReservations.size() != 0) {
@@ -119,8 +122,6 @@ public class PreLoaderActivity extends AppCompatActivity {
                     loadAllCourseReservationsFromServer(Status.PENDING);
                 }
             }
-
-
         });
     }
 
@@ -131,11 +132,13 @@ public class PreLoaderActivity extends AppCompatActivity {
                 + " " + courseReservation.getReservationCode();
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 1,
-                new Intent(this, MyCourseActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+                new Intent(this, MyCourseActivity.class),
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
                 .setSmallIcon(R.drawable.baseline_fitness_center_black_24dp)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_gymapp_foreground))
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(),
+                        R.mipmap.ic_launcher_gymapp_foreground))
                 .setContentTitle(title)
                 .setAutoCancel(true)
                 .setColorized(true)
@@ -150,7 +153,6 @@ public class PreLoaderActivity extends AppCompatActivity {
     }
 
 
-
     private void navigateToLoginActivity() {
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
@@ -162,40 +164,38 @@ public class PreLoaderActivity extends AppCompatActivity {
     }
 
 
-
-
     private void getUserByState() {
 
-        GetSpecificUserAsyncTask getSpecificUserAsyncTask = new GetSpecificUserAsyncTask(this,
-                Action.GET_BY_STATE_ACTION, new DbResponse<User>() {
-            @Override
-            public void onSuccess(User user) {
-                if (user != null && user.getIsLoggedIn().equals("true")) {
-                    appData.setCurrentUser(user);
+        GetSpecificUserAsyncTask getSpecificUserAsyncTask =
+                new GetSpecificUserAsyncTask(this,
+                        Action.GET_BY_STATE_ACTION, new DbResponse<User>() {
+                    @Override
+                    public void onSuccess(User user) {
+                        if (user != null && user.getIsLoggedIn().equals("true")) {
+                            appData.setCurrentUser(user);
 
-                    // init pending course reservations only when app start
-                    loadAllCourseReservationsFromServer(Status.PENDING);
+                            // init pending course reservations only when app start
+                            loadAllCourseReservationsFromServer(Status.PENDING);
 
-                    // update allCourses list every 60sec and check for diff's
-                    new Timer().scheduleAtFixedRate(new TimerTask() {
-                        @Override
-                        public void run() {
-                            loadAllCourseReservationsFromServer("ALL");
+                            // update allCourses list every 60sec and check for diff's
+                            new Timer().scheduleAtFixedRate(new TimerTask() {
+                                @Override
+                                public void run() {
+                                    loadAllCourseReservationsFromServer("ALL");
+                                }
+                            }, 0, 60000);
+
+                            navigateToDashboardActivity();
+
+                        } else {
+                            appData.setCurrentUser(null);
                         }
-                    }, 0, 60000);
-
-                    navigateToDashboardActivity();
-
-                } else {
-                    appData.setCurrentUser(null);
-                }
-            }
-
-            @Override
-            public void onError(Error error) {
-                navigateToLoginActivity();
-            }
-        });
+                    }
+                    @Override
+                    public void onError(Error error) {
+                        navigateToLoginActivity();
+                    }
+                });
         getSpecificUserAsyncTask.execute("true");
 
     }

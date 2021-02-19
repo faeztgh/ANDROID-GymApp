@@ -70,7 +70,7 @@
                         android:layout_height="match_parent"
                         android:layout_below="@+id/dashboard_title"
                         android:layout_marginTop="10dp"
-                        android:text="welcome"
+                        android:text="@string/welcome"
                         android:textColor="@color/mineShaft"
                         android:textSize="24sp" />
 
@@ -125,13 +125,12 @@
                         android:layout_height="wrap_content"
                         android:layout_rowWeight="1"
                         android:layout_columnWeight="1"
+                        android:layout_gravity="center"
                         android:layout_margin="12dp"
-                        app:cardCornerRadius="15dp"
-                        app:cardElevation="60dp"
                         android:background="@drawable/outline_input_curved"
                         android:backgroundTint="@color/mineShaft"
-                        android:layout_gravity="center"
-                        >
+                        app:cardCornerRadius="15dp"
+                        app:cardElevation="60dp">
 
                         <ImageView
                             android:id="@+id/my_courses_iv"
@@ -163,13 +162,12 @@
                         android:layout_height="wrap_content"
                         android:layout_rowWeight="1"
                         android:layout_columnWeight="1"
+                        android:layout_gravity="center"
                         android:layout_margin="12dp"
-                        app:cardCornerRadius="15dp"
-                        app:cardElevation="60dp"
                         android:background="@drawable/outline_input_curved"
                         android:backgroundTint="@color/mineShaft"
-                        android:layout_gravity="center"
-                        >
+                        app:cardCornerRadius="15dp"
+                        app:cardElevation="60dp">
 
                         <ImageView
                             android:id="@+id/profile_iv"
@@ -198,13 +196,12 @@
                         android:layout_height="wrap_content"
                         android:layout_rowWeight="1"
                         android:layout_columnWeight="1"
+                        android:layout_gravity="center"
                         android:layout_margin="12dp"
-                        app:cardCornerRadius="15dp"
-                        app:cardElevation="60dp"
                         android:background="@drawable/outline_input_curved"
                         android:backgroundTint="@color/mineShaft"
-                        android:layout_gravity="center"
-                        >
+                        app:cardCornerRadius="15dp"
+                        app:cardElevation="60dp">
 
                         <ImageView
                             android:id="@+id/share_iv"
@@ -221,7 +218,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:gravity="center"
-                            android:text="Share"
+                            android:text="@string/share"
                             android:textColor="@color/bone_bg"
                             android:textColorHighlight="@color/red"
                             android:textSize="25sp"
@@ -236,13 +233,13 @@
                         android:layout_height="wrap_content"
                         android:layout_rowWeight="1"
                         android:layout_columnWeight="1"
+                        android:layout_gravity="center"
                         android:layout_margin="12dp"
-                        app:cardCornerRadius="15dp"
-                        app:cardElevation="60dp"
                         android:background="@drawable/outline_input_curved"
                         android:backgroundTint="@color/mineShaft"
-                        android:layout_gravity="center"
-                        >
+                        app:cardCornerRadius="15dp"
+                        app:cardElevation="60dp">
+
                         <ImageView
                             android:id="@+id/wallet_iv"
                             android:layout_width="170dp"
@@ -258,7 +255,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:gravity="center"
-                            android:text="Wallet"
+                            android:text="@string/wallet"
                             android:textColor="@color/bone_bg"
                             android:textColorHighlight="@color/red"
                             android:textSize="25sp"
@@ -271,13 +268,12 @@
                         android:layout_height="wrap_content"
                         android:layout_rowWeight="1"
                         android:layout_columnWeight="1"
+                        android:layout_gravity="center"
                         android:layout_margin="12dp"
-                        app:cardCornerRadius="15dp"
-                        app:cardElevation="60dp"
                         android:background="@drawable/outline_input_curved"
                         android:backgroundTint="@color/mineShaft"
-                        android:layout_gravity="center"
-                        >
+                        app:cardCornerRadius="15dp"
+                        app:cardElevation="60dp">
 
                         <ImageView
                             android:id="@+id/journals_iv"
@@ -294,7 +290,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:gravity="center"
-                            android:text="Journals"
+                            android:text="@string/journals"
                             android:textColor="@color/bone_bg"
                             android:textColorHighlight="@color/red"
                             android:textSize="25sp"

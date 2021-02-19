@@ -49,9 +49,6 @@ public class Review {
         return ownerFullName;
     }
 
-    public void setOwnerFullName(String ownerFullName) {
-        this.ownerFullName = ownerFullName;
-    }
 
     @NonNull
     public String getId() {
@@ -66,10 +63,6 @@ public class Review {
         return dateTime;
     }
 
-    public void setDateTime(String dateTime) {
-        this.dateTime = dateTime;
-    }
-
     public String getText() {
         return text;
     }
@@ -82,15 +75,8 @@ public class Review {
         return courseId;
     }
 
-    public void setCourseId(String courseId) {
-        this.courseId = courseId;
-    }
-
     public String getOwnerId() {
         return ownerId;
     }
 
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
-    }
 }

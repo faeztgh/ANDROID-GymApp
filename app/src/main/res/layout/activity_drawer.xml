@@ -6,7 +6,6 @@
     android:layout_height="match_parent">
 
 
-
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -27,27 +26,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
+                android:gravity="center"
                 android:text="@string/version"
+                android:textSize="13sp"
                 app:layout_constraintBottom_toTopOf="@+id/copyright_tv"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:gravity="center"
-                android:textSize="13sp"
-                 />
+                app:layout_constraintRight_toRightOf="parent" />
 
             <TextView
                 android:id="@+id/copyright_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:text="@string/copyright"
                 android:gravity="center"
+                android:text="@string/copyright"
                 android:textSize="10sp"
 
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                />
+                app:layout_constraintRight_toRightOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>

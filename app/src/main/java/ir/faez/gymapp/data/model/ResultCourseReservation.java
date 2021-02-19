@@ -9,11 +9,4 @@ public class ResultCourseReservation {
         this.results = results;
     }
 
-    public List<CourseReservation> getResults() {
-        return results;
-    }
-
-    public void setResults(List<CourseReservation> results) {
-        this.results = results;
-    }
 }

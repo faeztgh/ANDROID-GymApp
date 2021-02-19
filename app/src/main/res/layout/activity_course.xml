@@ -87,7 +87,6 @@
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/baseline_title_black_24dp"
                     android:drawablePadding="5dp"
-                    android:text="YOGA"
                     android:textColor="@color/mineShaft"
 
 
@@ -102,7 +101,6 @@
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/baseline_monetization_on_black_24dp"
                     android:drawablePadding="5dp"
-                    android:text="price"
                     android:textColor="@color/mineShaft"
 
                     app:layout_constraintLeft_toRightOf="@id/vertical_middle_guid"
@@ -120,8 +118,7 @@
                     android:drawablePadding="5dp"
                     android:textColor="@color/black"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/course_title_tv"
-                    tools:text="50 workout" />
+                    app:layout_constraintTop_toBottomOf="@id/course_title_tv" />
 
 
                 <TextView
@@ -134,8 +131,6 @@
                     android:textColor="@color/black"
                     app:layout_constraintLeft_toRightOf="@id/vertical_middle_guid"
                     app:layout_constraintTop_toBottomOf="@id/course_price_tv"
-                    tools:text="36 hour"
-
 
                     />
 
@@ -149,7 +144,6 @@
                     android:textColor="@color/black"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/exercise_variant_tv"
-                    tools:text="12/07/2021 - 20:30 - even days"
 
                     />
 
@@ -163,7 +157,6 @@
                     android:textColor="@color/black"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/class_dateTime_tv"
-                    tools:text="Q5R42Ss8"
 
                     />
 
@@ -178,8 +171,7 @@
                     android:textColor="@color/bone_bg"
                     android:textSize="20sp"
 
-                    app:layout_constraintTop_toBottomOf="@id/horizontal_middle_guid"
-                    />
+                    app:layout_constraintTop_toBottomOf="@id/horizontal_middle_guid" />
 
 
                 <androidx.constraintlayout.widget.Guideline
@@ -203,15 +195,15 @@
             <ImageView
                 android:id="@+id/course_poster_iv"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
+                android:minHeight="150dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="10dp"
+                android:padding="5dp"
                 android:background="@drawable/ash_curve_btn"
                 android:backgroundTint="@color/white"
-                android:maxHeight="300dp"
-                android:minHeight="150dp"
                 android:src="@drawable/yoga" />
 
             <TextView

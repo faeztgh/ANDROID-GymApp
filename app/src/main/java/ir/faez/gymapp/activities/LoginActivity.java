@@ -23,11 +23,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private static final String TAG = "SIGNIN";
     private ActivityLoginBinding binding;
+    private NetworkHelper networkHelper;
     private String userName;
     private String password;
-    private NetworkHelper networkHelper;
     private AppData appData;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,13 +47,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         View view = binding.getRoot();
         setContentView(view);
 
-        // invoke Listeners
-        invokeOnClickListeners();
-
         // initializing NetworkHelper
         networkHelper = NetworkHelper.getInstance(getApplicationContext());
 
-
+        // invoke Listeners
+        invokeOnClickListeners();
     }
 
     private void invokeOnClickListeners() {
@@ -80,62 +77,56 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if (appData.getCurrentUser() == null) {
             if (isAuth()) {
-//                Implementing Network
                 final User finalUser = new User(userName, password);
-                networkHelper.signinUser(finalUser, new ResultListener<User>() {
-                    @Override
-                    public void onResult(Result<User> result) {
-                        Error error = (result != null) ? result.getError() : null;
-                        User resultUser = (result != null) ? result.getItem() : null;
-                        if ((result == null) || (error != null) || (resultUser == null)) {
-                            String errMsg = (error != null) ? error.getMessage() : getString(R.string.cantSignInError);
-                            Toast.makeText(LoginActivity.this, errMsg, Toast.LENGTH_SHORT).show();
-                            return;
+                //Implementing Network
+                networkHelper.signinUser(finalUser, result -> {
+                    Error error = (result != null) ? result.getError() : null;
+                    User resultUser = (result != null) ? result.getItem() : null;
+                    if ((result == null) || (error != null) || (resultUser == null)) {
+                        String errMsg = (error != null) ? error.getMessage() : getString(R.string.cantSignInError);
+                        Toast.makeText(LoginActivity.this, errMsg,
+                                Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // setting user fields and insert to DB
+                    finalUser.setId(resultUser.getId());
+                    finalUser.setSessionToken(resultUser.getSessionToken());
+                    finalUser.setFullName(resultUser.getFullName());
+                    finalUser.setEmail(resultUser.getEmail());
+                    finalUser.setUsername(resultUser.getUsername());
+                    finalUser.setPassword(resultUser.getPassword());
+                    finalUser.setIsLoggedIn("true");
+
+                    // Implementing Insertion to DB
+                    UserCudAsyncTask userCudAsyncTask = new UserCudAsyncTask(getApplicationContext(),
+                            Action.INSERT_ACTION, new DbResponse<User>() {
+                        @Override
+                        public void onSuccess(User user) {
+                            if (user != null) {
+                                appData.setCurrentUser(resultUser);
+//                                    currUser = resultUser;
+                                Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+                                startActivity(intent);
+                                userName = "";
+                                password = "";
+                            }
                         }
 
-
-                        finalUser.setId(resultUser.getId());
-                        finalUser.setSessionToken(resultUser.getSessionToken());
-                        finalUser.setFullName(resultUser.getFullName());
-                        finalUser.setEmail(resultUser.getEmail());
-                        finalUser.setUsername(resultUser.getUsername());
-                        finalUser.setPassword(resultUser.getPassword());
-                        finalUser.setIsLoggedIn("true");
-
-                        // Implementing Insertion to DB
-                        UserCudAsyncTask userCudAsyncTask = new UserCudAsyncTask(getApplicationContext(),
-                                Action.INSERT_ACTION, new DbResponse<User>() {
-                            @Override
-                            public void onSuccess(User user) {
-                                if (user != null) {
-                                    appData.setCurrentUser(resultUser);
-//                                    currUser = resultUser;
-                                    Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
-                                    startActivity(intent);
-                                    userName = "";
-                                    password = "";
-                                }
-                            }
-
-                            @Override
-                            public void onError(Error error) {
-                                Toast.makeText(LoginActivity.this,
-                                        R.string.cantSignInError, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        userCudAsyncTask.execute(finalUser);
-                    }
+                        @Override
+                        public void onError(Error error) {
+                            Toast.makeText(LoginActivity.this,
+                                    R.string.cantSignInError, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    userCudAsyncTask.execute(finalUser);
                 });
-
             }
         }
     }
 
     private boolean isAuth() {
-        if (isUsernameValid() && isPasswordValid()) {
-            return true;
-        }
-        return false;
+        return isUsernameValid() && isPasswordValid();
     }
 
     private boolean isUsernameValid() {
@@ -145,7 +136,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Toast.makeText(this, R.string.emptyUsernameField, Toast.LENGTH_SHORT).show();
             return false;
         }
-
     }
 
     private boolean isPasswordValid() {

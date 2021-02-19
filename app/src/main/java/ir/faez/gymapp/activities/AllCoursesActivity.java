@@ -2,7 +2,6 @@ package ir.faez.gymapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -30,6 +29,7 @@ import ir.faez.gymapp.utils.Action;
 import ir.faez.gymapp.utils.CourseAdapter;
 import ir.faez.gymapp.utils.OnCourseClickListener;
 
+
 public class AllCoursesActivity extends AppCompatActivity implements OnCourseClickListener {
 
     private static final String EXTRA_ACTIVITY_NAME = "EXTRA_ACTIVITY_NAME";
@@ -41,10 +41,10 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
 
     private List<CourseReservation> courseReservationsList;
     private LinkedHashMap<Course, String> allCoursesAndStatus;
-    private List<Course> allCourses;
     private ActivityAllCoursesBinding binding;
     private NetworkHelper networkHelper;
     private CourseAdapter courseAdapter;
+    private List<Course> allCourses;
     private AppData appData;
 
 
@@ -83,17 +83,18 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
     }
 
     private void swipeToRefreshImp() {
-
         binding.allCoursesSwipeToRefreshLayout.setOnRefreshListener(
                 this::loadAllData);
     }
 
 
     private void makeMyCoursesList() {
+        // init the instance filed
         allCoursesAndStatus = new LinkedHashMap<>();
+
         if (allCourses != null && allCourses.size() != 0) {
             if (courseReservationsList != null && courseReservationsList.size() != 0) {
-
+                //make a map of courses and their status
                 for (Course c : allCourses) {
                     for (CourseReservation cr : courseReservationsList) {
                         if (cr.getCourseId().equals(c.getId())) {
@@ -112,12 +113,14 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
         }
     }
 
-    // ***************************** Load CourseReservations from Server****************************************
+    // ***************************** Load CourseReservations from Server ****************************************
 
+    /**
+     * Load CourseReservations from Server
+     */
     private void loadCourseReservationsFromServerToDb() {
         networkHelper.getSpecificCourseReservationByOwnerId(appData.getCurrentUser(),
                 result -> {
-                    Log.d(TAG, "Result of getting user course reservation from server" + result);
                     Error error = (result != null) ? result.getError() : null;
                     List<CourseReservation> resultCourseReservation = result != null ? result.getItems() : null;
 
@@ -127,7 +130,7 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
                                 Toast.LENGTH_SHORT).show();
                         return;
                     }
-
+                    // insert them to DB
                     for (CourseReservation cr : resultCourseReservation) {
                         CourseReservationCudAsyncTask courseReservationCudAsyncTask =
                                 new CourseReservationCudAsyncTask(getApplicationContext(),
@@ -154,7 +157,9 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
 
     // ***************************** Load CourseReservations from DB ****************************************
 
-
+    /**
+     * Load CourseReservations from DB
+     */
     private void loadCourseReservationsFromDb() {
         GetSpecificCourseReservationAsyncTask getSpecificCourseReservationAsyncTask =
                 new GetSpecificCourseReservationAsyncTask(getApplicationContext(),
@@ -162,10 +167,12 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
                         new DbResponse<List<CourseReservation>>() {
                             @Override
                             public void onSuccess(List<CourseReservation> courseReservations) {
+                                // if result not exist, get all courses from server and insert to db
                                 if (allCourses == null) {
                                     getAllCoursesFromServerToDb();
                                 }
 
+                                // if result not exist, get all courseReservations from server and insert to db
                                 assert courseReservations != null;
                                 if (courseReservations.size() == 0) {
                                     loadCourseReservationsFromServerToDb();
@@ -264,6 +271,12 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
         recyclerView.setAdapter(courseAdapter);
     }
 
+    /**
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -277,7 +290,12 @@ public class AllCoursesActivity extends AppCompatActivity implements OnCourseCli
         }
     }
 
-
+    /**
+     *
+     * @param course
+     * @param position
+     * @param status
+     */
     @Override
     public void onCourseClicked(Course course, int position, String status) {
         if (allCoursesAndStatus != null && allCoursesAndStatus.size() != 0) {

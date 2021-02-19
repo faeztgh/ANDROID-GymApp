@@ -12,10 +12,10 @@ import ir.faez.gymapp.data.model.Course;
 import ir.faez.gymapp.utils.Action;
 
 public class CourseCudAsyncTask extends AsyncTask<Course, Void, Long> {
-    private Context context;
-    private CourseDao courseDao;
-    private Course course;
     private DbResponse<Course> dbResponse;
+    private CourseDao courseDao;
+    private Context context;
+    private Course course;
     private String action;
 
     public CourseCudAsyncTask(Context context, String action, DbResponse<Course> dbResponse) {
@@ -29,7 +29,6 @@ public class CourseCudAsyncTask extends AsyncTask<Course, Void, Long> {
         super.onPreExecute();
         DbManager dbManager = DbManager.getInstance((context));
         courseDao = dbManager.courseDao();
-
     }
 
     @Override

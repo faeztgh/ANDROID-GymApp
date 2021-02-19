@@ -11,10 +11,10 @@ import ir.faez.gymapp.data.model.CourseReservation;
 import ir.faez.gymapp.utils.Action;
 
 public class CourseReservationCudAsyncTask extends AsyncTask<CourseReservation, Void, Long> {
-    private Context context;
     private CourseReservationDao courseReservationDao;
-    private CourseReservation courseReservation;
     private DbResponse<CourseReservation> dbResponse;
+    private CourseReservation courseReservation;
+    private Context context;
     private String action;
 
     public CourseReservationCudAsyncTask(Context context, String action,
@@ -29,7 +29,6 @@ public class CourseReservationCudAsyncTask extends AsyncTask<CourseReservation, 
         super.onPreExecute();
         DbManager dbManager = DbManager.getInstance((context));
         courseReservationDao = dbManager.courseReservationDao();
-
     }
 
     @Override

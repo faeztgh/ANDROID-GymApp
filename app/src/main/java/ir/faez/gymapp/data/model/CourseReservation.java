@@ -60,14 +60,9 @@ public class CourseReservation implements Serializable {
         return reservedDate;
     }
 
-    public void setReservedDate(Date reservedDate) {
-        this.reservedDate = reservedDate;
-    }
-
     public String getOwnerId() {
         return ownerId;
     }
-
 
     @NonNull
     public String getId() {

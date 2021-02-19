@@ -1,12 +1,12 @@
 package ir.faez.gymapp.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -23,11 +23,10 @@ import ir.faez.gymapp.utils.Action;
 
 public class DashboardActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
-    private NavigationView navigationView;
     private ActivityDashboardBinding binding;
-
+    private NavigationView navigationView;
+    private DrawerLayout drawerLayout;
     private AppData appData;
 
     @Override
@@ -47,7 +46,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         setContentView(view);
 
         // handling drawer
-        drawerhandler();
+        drawerHandler();
 
         // handle dashboard user indo
         userInfoHandler();
@@ -66,6 +65,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         binding.shareIv.setOnClickListener(this);
     }
 
+    @SuppressLint("SetTextI18n")
     private void userInfoHandler() {
         if (appData.getCurrentUser() != null) {
             binding.dashboardUserName.setText(" " + appData.getCurrentUser().getFullName());
@@ -73,8 +73,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
     }
 
 
-    private void drawerhandler() {
-
+    private void drawerHandler() {
         drawerLayout = (DrawerLayout) findViewById(R.id.dashboard_activity);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
 
@@ -84,38 +83,40 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         navigationView = (NavigationView) findViewById(R.id.navigationView);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                switch (id) {
-                    case R.id.drawer_dashboard:
-                        Toast.makeText(DashboardActivity.this, "Dashboard", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.profile_iv:
-                        profileHandler();
-                        break;
-                    case R.id.drawer_about:
-                        Toast.makeText(DashboardActivity.this, "My Cart", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.drawer_logout:
-                        logoutHandler();
-                        break;
-                    case R.id.drawer_exit:
-                        exitFromAppHandler();
-                        break;
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
 
-                    default:
-                        return true;
-                }
-                return true;
+            switch (id) {
+                case R.id.drawer_dashboard:
+                    Toast.makeText(DashboardActivity.this,
+                            "Dashboard", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.profile_iv:
+                    Toast.makeText(DashboardActivity.this,
+                            "Profile", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.drawer_about:
+                    Toast.makeText(DashboardActivity.this,
+                            "About", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.drawer_logout:
+                    logoutHandler();
+                    break;
+                case R.id.drawer_exit:
+                    exitFromAppHandler();
+                    break;
+
+                default:
+                    return true;
             }
+            return true;
         });
 
     }
 
 
     private void logoutHandler() {
+        // change the user login status in DB
         UserCudAsyncTask userCudAsyncTask = new UserCudAsyncTask(this, Action.UPDATE_ACTION,
                 new DbResponse<User>() {
                     @Override
@@ -142,7 +143,6 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         if (drawerToggle.onOptionsItemSelected(item))
             return true;
 
@@ -155,31 +155,21 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         switch (v.getId()) {
             case R.id.all_courses_iv:
                 allCourseHandler();
-
                 break;
+
             case R.id.my_courses_iv:
                 myCoursesHandler();
-
                 break;
+
             case R.id.profile_iv:
-                profileHandler();
-
-                break;
             case R.id.user_avatar_iv:
                 profileHandler();
-
                 break;
+
             case R.id.share_iv:
-                Toast.makeText(this, R.string.optionNotImplYet, Toast.LENGTH_SHORT).show();
-
-                break;
             case R.id.wallet_iv:
-                Toast.makeText(this, R.string.optionNotImplYet, Toast.LENGTH_SHORT).show();
-
-                break;
             case R.id.journals_iv:
                 Toast.makeText(this, R.string.optionNotImplYet, Toast.LENGTH_SHORT).show();
-
                 break;
 
             default:
@@ -187,12 +177,12 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
+
+    //************************************* Navigation Handlers ******************************************
     private void myCoursesHandler() {
         Intent intent = new Intent(getApplicationContext(), MyCourseActivity.class);
         startActivity(intent);
     }
-
-    //************************************* Navigation Handlers ******************************************
     private void allCourseHandler() {
         Intent intent = new Intent(getApplicationContext(), AllCoursesActivity.class);
         startActivity(intent);

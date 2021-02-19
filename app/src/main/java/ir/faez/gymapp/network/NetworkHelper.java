@@ -78,7 +78,8 @@ public class NetworkHelper {
 
         }
 
-        Log.e(TAG, "Volley error with status code " + statusCode + " received with this message: " + data);
+        Log.e(TAG, "Volley error with status code " + statusCode +
+                " received with this message: " + data);
 
 
     }
@@ -88,7 +89,7 @@ public class NetworkHelper {
     public void signupUser(final User user, final ResultListener<User> listener) {
         if (!isNetworkConnected()) {
             Error error = new Error(context.getString(R.string.networkConnectionError));
-            listener.onResult(new Result<User>(null, null, error));
+            listener.onResult(new Result<>(null, null, error));
             return;
         }
 
@@ -99,60 +100,54 @@ public class NetworkHelper {
         } catch (Exception ex) {
             ex.printStackTrace();
             Error error = new Error(context.getString(R.string.networkJsonError));
-            listener.onResult(new Result<User>(null, null, error));
+            listener.onResult(new Result<>(null, null, error));
             return;
         }
 
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                if (TextUtils.isEmpty(response)) {
-                    Error error = new Error(context.getString(R.string.networkGeneralError));
-                    listener.onResult(new Result<User>(null, null, error));
-                    return;
-                }
-
-                User resultUser = null;
-                try {
-                    resultUser = gson.fromJson(response, new TypeToken<User>() {
-                    }.getType());
-
-                } catch (Exception ex) {
-                    Error error = new Error(context.getString(R.string.networkJsonError));
-                    listener.onResult(new Result<User>(null, null, error));
-                    return;
-                }
-
-                listener.onResult(new Result<User>(resultUser, null, null));
-            }
-        };
-
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                printVolleyErrorDetailes(error);
-
-                // checking for username or email existence
-                NetworkResponse errResponse = (error != null) ? error.networkResponse : null;
-                String data = "";
-                String myMessage = null;
-                if (errResponse != null) {
-                    byte[] bytes = errResponse.data;
-                    data = (bytes != null) ? new String(bytes, StandardCharsets.UTF_8) : "";
-                    if (data.substring(8, 11).equals("202")) {
-                        myMessage = "Username Exist!";
-                    } else if (data.substring(8, 11).equals("203")) {
-                        myMessage = "Email Exist!";
-                    } else {
-                        myMessage = context.getString(R.string.networkGeneralError);
-                    }
-                }
-
-                Error err = new Error(myMessage);
-                listener.onResult(new Result<User>(null, null, err));
+        Response.Listener<String> responseListener = response -> {
+            if (TextUtils.isEmpty(response)) {
+                Error error = new Error(context.getString(R.string.networkGeneralError));
+                listener.onResult(new Result<>(null, null, error));
                 return;
             }
+
+            User resultUser;
+            try {
+                resultUser = gson.fromJson(response, new TypeToken<User>() {
+                }.getType());
+
+            } catch (Exception ex) {
+                Error error = new Error(context.getString(R.string.networkJsonError));
+                listener.onResult(new Result<>(null, null, error));
+                return;
+            }
+
+            listener.onResult(new Result<>(resultUser, null, null));
+        };
+
+        Response.ErrorListener errorListener = error -> {
+            printVolleyErrorDetailes(error);
+
+            // checking for username or email existence
+            NetworkResponse errResponse = (error != null) ? error.networkResponse : null;
+            String data = "";
+            String myMessage = null;
+            if (errResponse != null) {
+                byte[] bytes = errResponse.data;
+                data = (bytes != null) ? new String(bytes, StandardCharsets.UTF_8) : "";
+                if (data.substring(8, 11).equals("202")) {
+                    myMessage = "Username Exist!";
+                } else if (data.substring(8, 11).equals("203")) {
+                    myMessage = "Email Exist!";
+                } else {
+                    myMessage = context.getString(R.string.networkGeneralError);
+                }
+            }
+
+            Error err = new Error(myMessage);
+            listener.onResult(new Result<>(null, null, err));
+            return;
         };
 
         final String jsonStr = userJson;
@@ -181,57 +176,53 @@ public class NetworkHelper {
     public void signinUser(final User user, final ResultListener<User> listener) {
         if (!isNetworkConnected()) {
             Error error = new Error(context.getString(R.string.networkConnectionError));
-            listener.onResult(new Result<User>(null, null, error));
+            listener.onResult(new Result<>(null, null, error));
             return;
         }
 
-        String url = hostUrl + "/login?username=" + user.getUsername() + "&password=" + user.getPassword();
+        String url = hostUrl + "/login?username=" + user.getUsername() + "&password="
+                + user.getPassword();
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "User signin response: " + response);
-                if (TextUtils.isEmpty(response)) {
-                    Error error = new Error(context.getString(R.string.networkGeneralError));
-                    listener.onResult(new Result<User>(null, null, error));
-                    return;
-                }
-
-                User resultUser = null;
-                try {
-                    resultUser = gson.fromJson(response, new TypeToken<User>() {
-                    }.getType());
-
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    Error error = new Error(context.getString(R.string.networkJsonError));
-                    listener.onResult(new Result<User>(null, null, error));
-                    return;
-                }
-
-                listener.onResult(new Result<User>(resultUser, null, null));
+        Response.Listener<String> responseListener = response -> {
+            Log.d(TAG, "User signin response: " + response);
+            if (TextUtils.isEmpty(response)) {
+                Error error = new Error(context.getString(R.string.networkGeneralError));
+                listener.onResult(new Result<>(null, null, error));
+                return;
             }
+
+            User resultUser;
+            try {
+                resultUser = gson.fromJson(response, new TypeToken<User>() {
+                }.getType());
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                Error error = new Error(context.getString(R.string.networkJsonError));
+                listener.onResult(new Result<>(null, null, error));
+                return;
+            }
+
+            listener.onResult(new Result<>(resultUser, null, null));
         };
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                printVolleyErrorDetailes(error);
-                // check for user/pass validation
-                NetworkResponse errResponse = (error != null) ? error.networkResponse : null;
-                String data = "";
-                String myMessage = null;
-                if (errResponse != null) {
-                    byte[] bytes = errResponse.data;
-                    data = (bytes != null) ? new String(bytes, StandardCharsets.UTF_8) : "";
-                    if (data.substring(8, 11).equals("101")) {
-                        myMessage = "Username or Password is Invalid";
-                    } else {
-                        myMessage = context.getString(R.string.networkGeneralError);
-                    }
+        Response.ErrorListener errorListener = error -> {
+            printVolleyErrorDetailes(error);
+
+            // check for user/pass validation
+            NetworkResponse errResponse = (error != null) ? error.networkResponse : null;
+            String data = "";
+            String myMessage = null;
+            if (errResponse != null) {
+                byte[] bytes = errResponse.data;
+                data = (bytes != null) ? new String(bytes, StandardCharsets.UTF_8) : "";
+                if (data.substring(8, 11).equals("101")) {
+                    myMessage = "Username or Password is Invalid";
+                } else {
+                    myMessage = context.getString(R.string.networkGeneralError);
                 }
-                Error err = new Error(myMessage);
-                listener.onResult(new Result<User>(null, null, err));
             }
+            Error err = new Error(myMessage);
+            listener.onResult(new Result<>(null, null, err));
         };
 
         StringRequest request = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
@@ -251,53 +242,45 @@ public class NetworkHelper {
     public void getAllCourses(final ResultListener<Course> listener) {
         if (!isNetworkConnected()) {
             Error error = new Error(context.getString(R.string.networkGeneralError));
-            listener.onResult(new Result<Course>(null, null, error));
+            listener.onResult(new Result<>(null, null, error));
             return;
         }
 
         String url = hostUrl + "/classes/Course";
-        String courseJson = null;
 
-
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "Get All Courses response: " + response);
-                if (TextUtils.isEmpty(response)) {
-                    Error error = new Error(context.getString(R.string.networkGeneralError));
-                    listener.onResult(new Result<Course>(null, null, error));
-                    return;
-                }
-
-                ResultCourse resultCourses = null;
-
-                try {
-                    resultCourses = gson.fromJson(response, new TypeToken<ResultCourse>() {
-                    }.getType());
-
-                    if (resultCourses.results == null) {
-                        return;
-                    }
-
-
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    Error error = new Error(context.getString(R.string.networkJsonError));
-                    listener.onResult(new Result<Course>(null, null, error));
-                    return;
-                }
-
-                listener.onResult(new Result<Course>(null, resultCourses.results, null));
+        Response.Listener<String> responseListener = response -> {
+            Log.d(TAG, "Get All Courses response: " + response);
+            if (TextUtils.isEmpty(response)) {
+                Error error = new Error(context.getString(R.string.networkGeneralError));
+                listener.onResult(new Result<>(null, null, error));
+                return;
             }
+
+            ResultCourse resultCourses;
+
+            try {
+                resultCourses = gson.fromJson(response, new TypeToken<ResultCourse>() {
+                }.getType());
+
+                if (resultCourses.results == null) {
+                    return;
+                }
+
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                Error error = new Error(context.getString(R.string.networkJsonError));
+                listener.onResult(new Result<>(null, null, error));
+                return;
+            }
+
+            listener.onResult(new Result<>(null, resultCourses.results, null));
         };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                printVolleyErrorDetailes(error);
-                Error err = new Error(context.getString(R.string.networkGeneralError));
-                listener.onResult(new Result<Course>(null, null, err));
-            }
+        Response.ErrorListener errorListener = error -> {
+            printVolleyErrorDetailes(error);
+            Error err = new Error(context.getString(R.string.networkGeneralError));
+            listener.onResult(new Result<>(null, null, err));
         };
 
 
@@ -325,7 +308,7 @@ public class NetworkHelper {
 
         if (!isNetworkConnected()) {
             Error error = new Error(context.getString(R.string.networkConnectionError));
-            listener.onResult(new Result<CourseReservation>(null, null, error));
+            listener.onResult(new Result<>(null, null, error));
             return;
         }
 
@@ -337,46 +320,41 @@ public class NetworkHelper {
         } catch (Exception ex) {
             ex.printStackTrace();
             Error error = new Error(context.getString(R.string.networkJsonError));
-            listener.onResult(new Result<CourseReservation>(null, null, error));
+            listener.onResult(new Result<>(null, null, error));
             return;
         }
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "Course reservation insert response: " + response);
-                if (TextUtils.isEmpty(response)) {
-                    Error error = new Error(context.getString(R.string.networkGeneralError));
-                    listener.onResult(new Result<CourseReservation>(null, null, error));
-                    return;
-                }
-
-                CourseReservation courseReservationResult = null;
-                try {
-                    courseReservationResult = gson.fromJson(response, new TypeToken<CourseReservation>() {
-                    }.getType());
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    Error error = new Error(context.getString(R.string.networkJsonError));
-                    listener.onResult(new Result<CourseReservation>(null, null, error));
-                    return;
-                }
-
-                listener.onResult(new Result<CourseReservation>(courseReservationResult, null, null));
-            }
-        };
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                printVolleyErrorDetailes(error);
-                Error err = new Error(context.getString(R.string.networkGeneralError));
-                listener.onResult(new Result<CourseReservation>(null, null, err));
+        Response.Listener<String> responseListener = response -> {
+            Log.d(TAG, "Course reservation insert response: " + response);
+            if (TextUtils.isEmpty(response)) {
+                Error error = new Error(context.getString(R.string.networkGeneralError));
+                listener.onResult(new Result<>(null, null, error));
                 return;
             }
+
+            CourseReservation courseReservationResult;
+            try {
+                courseReservationResult = gson.fromJson(response, new TypeToken<CourseReservation>() {
+                }.getType());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                Error error = new Error(context.getString(R.string.networkJsonError));
+                listener.onResult(new Result<>(null, null, error));
+                return;
+            }
+
+            listener.onResult(new Result<>(courseReservationResult, null, null));
+        };
+        Response.ErrorListener errorListener = error -> {
+            printVolleyErrorDetailes(error);
+            Error err = new Error(context.getString(R.string.networkGeneralError));
+            listener.onResult(new Result<>(null, null, err));
+            return;
         };
 
         final String jsonStr = expJson;
-        StringRequest request = new StringRequest(Request.Method.POST, url, responseListener, errorListener) {
+        StringRequest request = new StringRequest(Request.Method.POST, url,
+                responseListener, errorListener) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
@@ -402,7 +380,7 @@ public class NetworkHelper {
 
         if (!isNetworkConnected()) {
             Error error = new Error(context.getString(R.string.networkConnectionError));
-            listener.onResult(new Result<Review>(null, null, error));
+            listener.onResult(new Result<>(null, null, error));
             return;
         }
 
@@ -414,46 +392,41 @@ public class NetworkHelper {
         } catch (Exception ex) {
             ex.printStackTrace();
             Error error = new Error(context.getString(R.string.networkJsonError));
-            listener.onResult(new Result<Review>(null, null, error));
+            listener.onResult(new Result<>(null, null, error));
             return;
         }
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "Review insert response: " + response);
-                if (TextUtils.isEmpty(response)) {
-                    Error error = new Error(context.getString(R.string.networkGeneralError));
-                    listener.onResult(new Result<Review>(null, null, error));
-                    return;
-                }
-
-                Review reviewResult = null;
-                try {
-                    reviewResult = gson.fromJson(response, new TypeToken<Review>() {
-                    }.getType());
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    Error error = new Error(context.getString(R.string.networkJsonError));
-                    listener.onResult(new Result<Review>(null, null, error));
-                    return;
-                }
-
-                listener.onResult(new Result<Review>(reviewResult, null, null));
-            }
-        };
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                printVolleyErrorDetailes(error);
-                Error err = new Error(context.getString(R.string.networkGeneralError));
-                listener.onResult(new Result<Review>(null, null, err));
+        Response.Listener<String> responseListener = response -> {
+            Log.d(TAG, "Review insert response: " + response);
+            if (TextUtils.isEmpty(response)) {
+                Error error = new Error(context.getString(R.string.networkGeneralError));
+                listener.onResult(new Result<>(null, null, error));
                 return;
             }
+
+            Review reviewResult;
+            try {
+                reviewResult = gson.fromJson(response, new TypeToken<Review>() {
+                }.getType());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                Error error = new Error(context.getString(R.string.networkJsonError));
+                listener.onResult(new Result<>(null, null, error));
+                return;
+            }
+
+            listener.onResult(new Result<>(reviewResult, null, null));
+        };
+        Response.ErrorListener errorListener = error -> {
+            printVolleyErrorDetailes(error);
+            Error err = new Error(context.getString(R.string.networkGeneralError));
+            listener.onResult(new Result<>(null, null, err));
+            return;
         };
 
         final String jsonStr = expJson;
-        StringRequest request = new StringRequest(Request.Method.POST, url, responseListener, errorListener) {
+        StringRequest request = new StringRequest(Request.Method.POST, url,
+                responseListener, errorListener) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
@@ -482,48 +455,40 @@ public class NetworkHelper {
         }
 
         String url = hostUrl + "/classes/Review";
-        String courseJson = null;
 
-
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "Get All Reviews response: " + response);
-                if (TextUtils.isEmpty(response)) {
-                    Error error = new Error(context.getString(R.string.networkGeneralError));
-                    listener.onResult(new Result<Review>(null, null, error));
-                    return;
-                }
-
-                ResultReviews resultReviews = null;
-
-                try {
-                    resultReviews = gson.fromJson(response, new TypeToken<ResultReviews>() {
-                    }.getType());
-
-                    if (resultReviews.results == null) {
-                        return;
-                    }
-
-
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    Error error = new Error(context.getString(R.string.networkJsonError));
-                    listener.onResult(new Result<Review>(null, null, error));
-                    return;
-                }
-
-                listener.onResult(new Result<Review>(null, resultReviews.results, null));
+        Response.Listener<String> responseListener = response -> {
+            Log.d(TAG, "Get All Reviews response: " + response);
+            if (TextUtils.isEmpty(response)) {
+                Error error = new Error(context.getString(R.string.networkGeneralError));
+                listener.onResult(new Result<>(null, null, error));
+                return;
             }
+
+            ResultReviews resultReviews;
+
+            try {
+                resultReviews = gson.fromJson(response, new TypeToken<ResultReviews>() {
+                }.getType());
+
+                if (resultReviews.results == null) {
+                    return;
+                }
+
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                Error error = new Error(context.getString(R.string.networkJsonError));
+                listener.onResult(new Result<>(null, null, error));
+                return;
+            }
+
+            listener.onResult(new Result<>(null, resultReviews.results, null));
         };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                printVolleyErrorDetailes(error);
-                Error err = new Error(context.getString(R.string.networkGeneralError));
-                listener.onResult(new Result<Review>(null, null, err));
-            }
+        Response.ErrorListener errorListener = error -> {
+            printVolleyErrorDetailes(error);
+            Error err = new Error(context.getString(R.string.networkGeneralError));
+            listener.onResult(new Result<>(null, null, err));
         };
 
 
@@ -550,7 +515,7 @@ public class NetworkHelper {
     public void getSpecificCourseReservationByOwnerId(final User user, final ResultListener<CourseReservation> listener) {
         if (!isNetworkConnected()) {
             Error error = new Error(context.getString(R.string.networkGeneralError));
-            listener.onResult(new Result<CourseReservation>(null, null, error));
+            listener.onResult(new Result<>(null, null, error));
             return;
         }
 
@@ -559,47 +524,39 @@ public class NetworkHelper {
         String specificCourseReservationJson = null;
 
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "Get Specific CourseReservation response: " + response);
-                if (TextUtils.isEmpty(response)) {
-                    Error error = new Error(context.getString(R.string.networkGeneralError));
-                    listener.onResult(new Result<CourseReservation>(null, null, error));
+        Response.Listener<String> responseListener = response -> {
+            Log.d(TAG, "Get Specific CourseReservation response: " + response);
+            if (TextUtils.isEmpty(response)) {
+                Error error = new Error(context.getString(R.string.networkGeneralError));
+                listener.onResult(new Result<>(null, null, error));
+                return;
+            }
+
+            ResultCourseReservation resultCourseReservation;
+            try {
+                resultCourseReservation = gson.fromJson(response, new TypeToken<ResultCourseReservation>() {
+                }.getType());
+
+
+                if (resultCourseReservation.results == null) {
                     return;
                 }
 
-                ResultCourseReservation resultCourseReservation = null;
-                try {
-                    resultCourseReservation = gson.fromJson(response, new TypeToken<ResultCourseReservation>() {
-                    }.getType());
-
-
-                    if (resultCourseReservation.results == null) {
-                        return;
-                    }
-
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    Error error = new Error(context.getString(R.string.networkJsonError));
-                    listener.onResult(new Result<CourseReservation>(null, null, error));
-                    return;
-                }
-
-                listener.onResult(new Result<CourseReservation>(null, resultCourseReservation.results, null));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                Error error = new Error(context.getString(R.string.networkJsonError));
+                listener.onResult(new Result<>(null, null, error));
+                return;
             }
+
+            listener.onResult(new Result<>(null, resultCourseReservation.results, null));
         };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                printVolleyErrorDetailes(error);
-                Error err = new Error(context.getString(R.string.networkGeneralError));
-                listener.onResult(new Result<CourseReservation>(null, null, err));
-            }
+        Response.ErrorListener errorListener = error -> {
+            printVolleyErrorDetailes(error);
+            Error err = new Error(context.getString(R.string.networkGeneralError));
+            listener.onResult(new Result<>(null, null, err));
         };
-
-        final String jsonStr = specificCourseReservationJson;
 
         StringRequest request = new StringRequest(Request.Method.GET, url, responseListener, errorListener) {
             @Override
@@ -613,65 +570,57 @@ public class NetworkHelper {
 
                 return headers;
             }
-
-
         };
         requestQueue.add(request);
     }
 
     //  ********************************************  Delete Reservation **************************
-    public void deleteCourseReservation(final CourseReservation courseReservation, final User currentUser,
-                                        final ResultListener<CourseReservation> listener) {
+    public void deleteCourseReservation(final CourseReservation courseReservation,
+                                        final User currentUser, final ResultListener<CourseReservation> listener) {
         if (!isNetworkConnected()) {
             Error error = new Error(context.getString(R.string.networkGeneralError));
-            listener.onResult(new Result<CourseReservation>(null, null, error));
+            listener.onResult(new Result<>(null, null, error));
             return;
         }
 
         String url = hostUrl + "/classes/CourseReservation/" + courseReservation.getId();
-        String courseReservationJson = null;
+        String courseReservationJson;
         try {
             courseReservationJson = gson.toJson(courseReservation);
         } catch (Exception ex) {
             ex.printStackTrace();
             Error error = new Error(context.getString(R.string.networkJsonError));
-            listener.onResult(new Result<CourseReservation>(null, null, error));
+            listener.onResult(new Result<>(null, null, error));
             return;
         }
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "CourseReservation delete response: " + response);
-                if (TextUtils.isEmpty(response)) {
-                    Error error = new Error(context.getString(R.string.networkGeneralError));
-                    listener.onResult(new Result<CourseReservation>(null, null, error));
-                    return;
-                }
-
-                CourseReservation resultCourseReservation = null;
-                try {
-                    resultCourseReservation = gson.fromJson(response, new TypeToken<CourseReservation>() {
-                    }.getType());
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    Error error = new Error(context.getString(R.string.networkJsonError));
-                    listener.onResult(new Result<CourseReservation>(null, null, error));
-                    return;
-                }
-
-                listener.onResult(new Result<CourseReservation>(resultCourseReservation,
-                        null, null));
+        Response.Listener<String> responseListener = response -> {
+            Log.d(TAG, "CourseReservation delete response: " + response);
+            if (TextUtils.isEmpty(response)) {
+                Error error = new Error(context.getString(R.string.networkGeneralError));
+                listener.onResult(new Result<>(null, null, error));
+                return;
             }
+
+            CourseReservation resultCourseReservation;
+            try {
+                resultCourseReservation = gson.fromJson(response, new TypeToken<CourseReservation>() {
+                }.getType());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                Error error = new Error(context.getString(R.string.networkJsonError));
+                listener.onResult(new Result<>(null, null, error));
+                return;
+            }
+
+            listener.onResult(new Result<>(resultCourseReservation,
+                    null, null));
         };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                printVolleyErrorDetailes(error);
-                Error err = new Error(context.getString(R.string.networkGeneralError));
-                listener.onResult(new Result<CourseReservation>(null, null, err));
-            }
+        Response.ErrorListener errorListener = error -> {
+            printVolleyErrorDetailes(error);
+            Error err = new Error(context.getString(R.string.networkGeneralError));
+            listener.onResult(new Result<>(null, null, err));
         };
 
         final String jsonStr = courseReservationJson;

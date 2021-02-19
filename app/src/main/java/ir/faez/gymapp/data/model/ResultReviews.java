@@ -9,11 +9,4 @@ public class ResultReviews {
         this.results = results;
     }
 
-    public List<Review> getResults() {
-        return results;
-    }
-
-    public void setResults(List<Review> results) {
-        this.results = results;
-    }
 }

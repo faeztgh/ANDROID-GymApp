@@ -6,9 +6,8 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
     android:background="@drawable/review_stroked_white_bg"
-    android:padding="5dp"
     android:elevation="2dp"
-    >
+    android:padding="5dp">
 
     <TextView
         android:id="@+id/review_owner_name_tv"
@@ -16,8 +15,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
 
-        android:paddingRight="5dp"
         android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:textColor="@color/black"
         android:textSize="15sp"
         android:textStyle="bold"
@@ -43,9 +42,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:padding="5dp"
         android:textColor="@color/mineShaft"
         android:textSize="13sp"
-        android:padding="5dp"
 
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

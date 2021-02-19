@@ -8,7 +8,6 @@
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     android:background="@drawable/course_item"
-
     android:padding="20dp"
 
     >
@@ -36,7 +35,6 @@
         app:layout_constraintLeft_toRightOf="@id/vertical_middle_left_guid"
         app:layout_constraintTop_toTopOf="parent"
 
-        tools:text="ABS"
 
         />
 
@@ -50,8 +48,7 @@
         android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@id/exercise_time_tv"
         app:layout_constraintLeft_toRightOf="@id/vertical_middle_left_guid"
-        app:layout_constraintTop_toBottomOf="@+id/exercise_title_tv"
-        tools:text="50 workout" />
+        app:layout_constraintTop_toBottomOf="@+id/exercise_title_tv" />
 
 
     <TextView
@@ -65,8 +62,7 @@
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/vertical_middle_left_guid"
-        app:layout_constraintTop_toBottomOf="@id/exercise_variant_tv"
-        tools:text="36 hour" />
+        app:layout_constraintTop_toBottomOf="@id/exercise_variant_tv" />
 
     <TextView
         android:id="@+id/myCourse_ribbon_tv"
