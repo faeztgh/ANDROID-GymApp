@@ -233,6 +233,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
                 android:layout_marginTop="25dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
                 android:background="@drawable/each_course_poster_curved_bg"
                 android:gravity="top"
                 android:hint="@string/addYourReview"
@@ -291,6 +293,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
                 android:background="@color/bone_bg" />
         </LinearLayout>
 

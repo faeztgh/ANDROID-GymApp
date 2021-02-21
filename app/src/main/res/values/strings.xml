@@ -94,6 +94,8 @@
     <string name="reserveCourse">Reserve Course</string>
     <string name="reservationCode">Reservation Code:</string>
     <string name="wrongEmailFormat">Wrong email format</string>
+    <string name="emptyReview">Cannot submit Empty review!</string>
+    <string name="cannotUseDigitAsName">Cannot use digit as name!</string>
     <string name="oneOfYourCoursesAreConfirmed">One of your courses are confirmed!</string>
 
     <string name="successfulRegister">You Signed up Successfully!</string>

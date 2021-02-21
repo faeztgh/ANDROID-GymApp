@@ -64,6 +64,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         // validate fields
         if (isInputsFilled()
                 && isEmailValid()
+                && isFullnameValid()
                 && isPasswordValid()
                 && isConfirmPasswordValid()) {
 
@@ -87,6 +88,16 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
 
     //****************************** Validating inputs *********************************
+    private boolean isFullnameValid() {
+        String str = binding.fullnameEdt.getText().toString().trim();
+        if (!str.matches("-?\\d+(\\.\\d+)?")) {
+            return true;
+        } else {
+            Toast.makeText(this, R.string.cannotUseDigitAsName, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+
     private boolean isEmailValid() {
         String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
         if (binding.emailEdt.getText().toString().trim().matches(emailPattern)

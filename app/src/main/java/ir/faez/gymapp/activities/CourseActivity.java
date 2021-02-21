@@ -262,29 +262,34 @@ public class CourseActivity extends AppCompatActivity implements View.OnClickLis
      * add review to the server
      */
     private void addReviewBtnHandler() {
-        Date dateTime = Calendar.getInstance().getTime();
 
-        Review review = new Review(dateTime.toString(),
-                binding.addReviewEt.getText().toString().trim(),
-                course.getId(), appData.getCurrentUser().getId(),
-                appData.getCurrentUser().getFullName());
+        if (!binding.addReviewEt.getText().toString().trim().isEmpty()) {
+            Date dateTime = Calendar.getInstance().getTime();
 
-        networkHelper.insertReview(review, appData.getCurrentUser(), result -> {
-            Error error = (result != null) ? result.getError() : null;
-            if ((result == null) || (error != null)) {
-                String errMsg = (error != null) ? error.getMessage() : getString(R.string.somethingWentWrongOnInsert);
-                Toast.makeText(CourseActivity.this, errMsg, Toast.LENGTH_SHORT).show();
-                return;
-            }
+            Review review = new Review(dateTime.toString(),
+                    binding.addReviewEt.getText().toString().trim(),
+                    course.getId(), appData.getCurrentUser().getId(),
+                    appData.getCurrentUser().getFullName());
 
-            // after insert, load them from server to db and read them again
-            getAllReviewsFromDb();
-            Toast.makeText(CourseActivity.this, R.string.successfullAddingReview,
-                    Toast.LENGTH_SHORT).show();
-            binding.addReviewEt.setText("");
-        });
+            networkHelper.insertReview(review, appData.getCurrentUser(), result -> {
+                Error error = (result != null) ? result.getError() : null;
+                if ((result == null) || (error != null)) {
+                    String errMsg = (error != null) ? error.getMessage() : getString(R.string.somethingWentWrongOnInsert);
+                    Toast.makeText(CourseActivity.this, errMsg, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // after insert, load them from server to db and read them again
+                getAllReviewsFromServerToDb();
+                getAllReviewsFromDb();
+                Toast.makeText(CourseActivity.this, R.string.successfullAddingReview,
+                        Toast.LENGTH_SHORT).show();
+                binding.addReviewEt.setText("");
+            });
+        } else {
+            Toast.makeText(appData, R.string.emptyReview, Toast.LENGTH_SHORT).show();
+        }
     }
-
 
     /**
      * handle delete or reserve depend on the activity

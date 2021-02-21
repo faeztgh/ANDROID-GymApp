@@ -11,10 +11,9 @@
 
     <TextView
         android:id="@+id/review_owner_name_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
-
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:textColor="@color/black"
@@ -22,19 +21,22 @@
         android:textStyle="bold"
 
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/review_dateTime_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:textColor="@color/gray"
         android:textSize="11sp"
 
-        app:layout_constraintLeft_toLeftOf="@+id/review_owner_name_tv"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/review_owner_name_tv" />
 
 
     <TextView

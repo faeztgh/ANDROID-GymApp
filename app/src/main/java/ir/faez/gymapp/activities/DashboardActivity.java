@@ -123,7 +123,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
                     public void onSuccess(User user) {
                         if (user != null) {
                             appData.setCurrentUser(null);
-                            exitFromAppHandler();
+                            navigateToLogin();
                         }
                     }
 
@@ -138,6 +138,11 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         newUser.setIsLoggedIn("false");
         appData.setCurrentUser(newUser);
         userCudAsyncTask.execute(appData.getCurrentUser());
+    }
+
+    private void navigateToLogin() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 
 
@@ -183,6 +188,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         Intent intent = new Intent(getApplicationContext(), MyCourseActivity.class);
         startActivity(intent);
     }
+
     private void allCourseHandler() {
         Intent intent = new Intent(getApplicationContext(), AllCoursesActivity.class);
         startActivity(intent);

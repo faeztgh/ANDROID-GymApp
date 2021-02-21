@@ -73,8 +73,9 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         public void setItemData(int position) throws IOException {
             this.position = position;
             this.review = reviewList.get(position);
+            String ownerName = review.getOwnerFullName().length() > 40 ? review.getOwnerFullName().substring(0, 40) : review.getOwnerFullName();
 
-            reviewOwner.setText(review.getOwnerFullName());
+            reviewOwner.setText(ownerName);
             reviewDateTime.setText(review.getDateTime());
             reviewText.setText(review.getText());
 
