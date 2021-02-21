@@ -183,7 +183,7 @@ public class PreLoaderActivity extends AppCompatActivity {
                                 public void run() {
                                     loadAllCourseReservationsFromServer("ALL");
                                 }
-                            }, 0, 5000);
+                            }, 0, 60000);
 
                             navigateToDashboardActivity();
 
