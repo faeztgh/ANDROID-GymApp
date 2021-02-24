@@ -16,7 +16,6 @@ public class AppData extends Application {
     private List<CourseReservation> allCourseReservations = null;
     public static final String CHANNEL_1_ID = "channel1";
     private static final String TAG = "AppData";
-    private List<Course> allCourses = null;
     private User currentUser = null;
 
     @Override
@@ -57,7 +56,5 @@ public class AppData extends Application {
         this.allCourseReservations = allCourseReservations;
     }
 
-    public void setAllCourses(List<Course> allCourses) {
-        this.allCourses = allCourses;
-    }
+
 }
