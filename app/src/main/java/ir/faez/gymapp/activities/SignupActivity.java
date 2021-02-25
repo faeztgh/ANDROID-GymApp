@@ -14,7 +14,7 @@ import ir.faez.gymapp.network.NetworkHelper;
 
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String TAG = "SIGNUP";
+    private static final String TAG = "SIGN_UP";
     private ActivitySignupBinding binding;
     private NetworkHelper networkHelper;
 

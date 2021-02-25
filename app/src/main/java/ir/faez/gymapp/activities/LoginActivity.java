@@ -125,6 +125,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    //******************************* Validations *************************************************
+
     private boolean isAuth() {
         return isUsernameValid() && isPasswordValid();
     }
