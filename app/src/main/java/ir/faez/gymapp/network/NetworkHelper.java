@@ -47,8 +47,8 @@ public class NetworkHelper {
     private NetworkHelper(Context context) {
         this.context = context;
         this.requestQueue = Volley.newRequestQueue(context);
-        this.appId = "tO5kzULXowJLTVrFqsj8JlTSywfwXgXUpfXwZgo4";
-        this.apiKey = "89Z7uKzjU3d69n3GbWK2nDAWs9ZqxDEfVZsauMu3";
+        this.appId = "";
+        this.apiKey = "";
         this.hostUrl = "https://parseapi.back4app.com";
     }
 
