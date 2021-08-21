@@ -8,7 +8,7 @@
 
 
 ## Description
-Gym app is a simple app that use BACK4APP system as a backend.
+Gym app is a Android app that use BACK4APP system as a backend.
 
 
 
